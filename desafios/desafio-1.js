@@ -1,18 +1,18 @@
 class ProductManager {
-  #products = [];
+  products = [];
   idAuto = 1;
 
   getProducts() {
-    return this.#products;
+    return this.products;
   }
 
   addProduct(product) {
-    const sameCode = this.#products.find((p) => p.code === product.code);
+    const sameCode = this.products.find((p) => p.code === product.code);
     if (sameCode) {
       return console.log("El codigo del producto esta repetido");
       // throw Error("El codigo del producto esta repetido");
     }
-    this.#products.push({
+    this.products.push({
       ...product,
       id: this.idAuto,
     });
@@ -21,7 +21,7 @@ class ProductManager {
   }
 
   getProductsById(productId) {
-    const product = this.#products.find((p) => p.id === productId);
+    const product = this.products.find((p) => p.id === productId);
     if (!product) {
       return console.log("El producto NO existe");
       //throw Error("El producto NO existe");
