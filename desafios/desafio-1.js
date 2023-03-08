@@ -34,6 +34,7 @@ class ProductManager {
 console.log("####");
 const productManager = new ProductManager();
 console.log("Creada la instancia");
+
 // Se llamará “getProducts” recién creada la instancia, debe devolver un arreglo vacío []
 console.log("\n####");
 products = productManager.getProducts();
