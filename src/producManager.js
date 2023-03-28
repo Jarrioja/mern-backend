@@ -1,6 +1,6 @@
-const fs = require("fs");
-
-class ProductManager {
+// const fs = require("fs");
+import fs from "fs";
+export default class ProductManager {
   #products;
   #idAuto = 1;
   constructor(path) {
@@ -27,7 +27,6 @@ class ProductManager {
 
   async loadProducts() {
     this.#products = await this.readFile();
-    console.log(this.#products);
   }
 
   async getProducts() {
@@ -76,11 +75,12 @@ class ProductManager {
 
   async getProductsById(productId) {
     try {
-      const product = this.#products.find((p) => p.id === productId);
+      const products = await this.readFile();
+      const product = products.find((p) => p.id === productId);
       if (!product) {
         throw Error("El producto NO existe");
       }
-      console.log(product);
+      return product;
     } catch (error) {
       console.log(error);
     }
@@ -114,64 +114,3 @@ class ProductManager {
     }
   }
 }
-
-const main = async () => {
-  const productManager = new ProductManager("products.json");
-  await productManager.getProducts();
-  await productManager.addProduct({
-    title: "Producto 1",
-    description: "Este es un producto prueba",
-    price: 200,
-    thumbnail: "Sin imagen",
-    code: "abc123",
-    stock: 25,
-  });
-
-  await productManager.addProduct({
-    title: "Producto 2",
-    description: "Este es un producto prueba",
-    price: 200,
-    thumbnail: "Sin imagen",
-    code: "abc1233",
-    stock: 25,
-  });
-
-  await productManager.addProduct({
-    title: "Producto 3",
-    description: "Este es un producto prueba",
-    price: 5400,
-    thumbnail: "Sin imagen",
-    code: "abc33",
-    stock: 5,
-  });
-
-  await productManager.updateProductById(1, {
-    title: "Producto 1 Actualizado",
-    description: "Este es un producto prueba",
-    price: 200,
-    thumbnail: "Sin imagen",
-    code: "abc123",
-    stock: 2,
-  });
-  await productManager.removeProductById(2);
-
-  console.log("\n#### Validando errores #####");
-  console.log("# Añadir producto con codigo existente");
-  await productManager.addProduct({
-    title: "Producto 1",
-    description: "Este es un producto prueba",
-    price: 200,
-    thumbnail: "Sin imagen",
-    code: "abc123",
-    stock: 25,
-  });
-  console.log("# Buscar producto inexistente");
-  await productManager.getProductsById(50);
-
-  console.log("# Actualizar producto inexistente");
-  await productManager.updateProductById(50);
-
-  console.log("# Eliminar producto inexistente");
-  await productManager.removeProductById(50);
-};
-main();
