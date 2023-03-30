@@ -1,29 +1,30 @@
 [
     {
-        "id": 1,
-        "title": "Producto 1 Actualizado",
-        "description": "Producto de Prueba #1",
-        "price": 200,
-        "thumbnail": "Sin imagen",
-        "code": "abc-1",
-        "stock": 2
+        "title": "Producto 1",
+        "description": "Descripcion del producto nuevo",
+        "price": 500,
+        "thumbnails": [
+            "imagen.jpg",
+            "imagen2.jpg",
+            "imagen3.jpg"
+        ],
+        "category": "Cursos",
+        "code": "Codigo-Aleatoreo",
+        "stock": 10,
+        "id": 1
     },
     {
-        "id": 2,
         "title": "Producto 2",
-        "description": "Producto de Prueba #2",
-        "price": 5400,
-        "thumbnail": "Sin imagen",
-        "code": "abc-2",
-        "stock": 5
-    },
-    {
-        "id": 3,
-        "title": "Producto 3",
-        "description": "Producto de Prueba #3",
-        "price": 200,
-        "thumbnail": "Sin imagen",
-        "code": "abc-3",
-        "stock": 25
+        "description": "Descripcion del producto nuevo",
+        "price": 500,
+        "thumbnails": [
+            "imagen.jpg",
+            "imagen2.jpg",
+            "imagen3.jpg"
+        ],
+        "category": "Cursos",
+        "code": "Codigo-Aleatoreo2",
+        "stock": 10,
+        "id": 2
     }
 ]

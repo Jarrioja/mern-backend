@@ -17,6 +17,7 @@ export default class ProductManager {
     } catch (error) {
       console.log(`Archivo ${this.path} no existe, creando...`);
       await fs.promises.writeFile(this.path, "[]");
+      return [];
     }
   }
 
@@ -25,7 +26,7 @@ export default class ProductManager {
   }
 
   async loadProducts() {
-    this.#products = await this.readFile();
+    return (this.#products = await this.readFile());
   }
 
   async getProducts() {
@@ -37,15 +38,24 @@ export default class ProductManager {
     }
   }
 
-  async addProduct({ title, description, price, thumbnail, code, stock }) {
+  async createProduct({
+    title,
+    description,
+    price,
+    thumbnails,
+    code,
+    stock,
+    category,
+  }) {
     try {
       if (
         title === undefined ||
         description === undefined ||
         price === undefined ||
-        thumbnail === undefined ||
+        thumbnails === undefined ||
         code === undefined ||
-        stock === undefined
+        stock === undefined ||
+        category === undefined
       ) {
         throw new Error("Faltan datos del producto");
       }
@@ -53,20 +63,26 @@ export default class ProductManager {
       if (sameCode) {
         throw Error("El codigo del producto esta repetido");
       }
+      const products = await this.loadProducts();
+      if (!products.length) {
+        this.#idAuto = 1;
+      } else {
+        this.#idAuto = products[products.length - 1].id + 1;
+      }
       const product = {
         title,
         description,
         price,
-        thumbnail,
+        thumbnails,
+        category,
         code,
         stock,
         id: this.#idAuto,
       };
 
-      this.#products.push(product);
-      await this.updateFile(this.#products);
-      this.#idAuto++;
-      console.log(`Producto con id ${product.id} creado correctamente.`);
+      products.push(product);
+      await this.updateFile(products);
+      return `Producto con id ${product.id} creado correctamente.`;
     } catch (error) {
       console.log(error);
     }

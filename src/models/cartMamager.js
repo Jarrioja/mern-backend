@@ -38,7 +38,7 @@ export default class CartManager {
     } else {
       this.#idAuto = carts[carts.length - 1].id + 1;
     }
-    console.log(this.#idAuto);
+
     const cart = {
       id: this.#idAuto,
       products: [],
@@ -58,50 +58,49 @@ export default class CartManager {
       console.log(error);
     }
   }
+
+  async updateCartById(cartId, updatedCart) {
+    try {
+      const carts = await this.readFile();
+      const index = carts.findIndex((cart) => cart.id === cartId);
+      if (index < 0) {
+        throw Error(`No se encontró el carrito.`);
+      }
+
+      carts[index].products = updatedCart.products;
+      await this.updateFile(carts);
+      return "Carrito Actualizado";
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async addProduct(cartId, productId) {
     try {
       if (cartId === undefined || productId === undefined) {
         throw new Error("ERROR EN UNO DE LOS ID");
       }
-      console.log(`Carrito: ${cartId} \nProducto: ${productId}`);
       const cart = await this.getCart(cartId);
-      const productExists = await productManager.getProductsById(productId);
+      const product = await productManager.getProductsById(productId);
       const newProduct = { id: productId, qty: 1 };
-
-      // BUSCAR CARRITO POR EL INDEX usando .findIndex()
       if (!cart) {
         throw Error("El Carrito NO existe");
       }
-      if (!productExists) {
+      if (!product) {
         throw Error("El producto NO existe");
       }
-      if (!cart.products.length > 1) {
-        return cart.products.push(newProduct);
+      const productIndex = cart.products.findIndex(
+        (product) => product.id === productId
+      );
+      if (productIndex < 0) {
+        cart.products.push(newProduct);
+        return await this.updateCartById(cartId, cart);
       }
+      cart.products[productIndex].qty++;
 
-      const product = cart.products.find((product) => product.id === productId);
-      if (!product) {
-        return cart.products.push(newProduct);
-      }
-      return cart.products.push({ ...newProduct, qty: product.qty++ });
+      return await this.updateCartById(cartId, cart);
     } catch (error) {
       console.log(error);
     }
   }
-  //   async getProducts() {
-  //     try {
-  //       await this.loadProducts();
-  //       return this.#products;
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
 }
-
-const main = async () => {
-  const cartManager = new CartManager("carts.json");
-  //   await cartManager.createCart();
-  await cartManager.addProduct(3, 1);
-  await cartManager.getCart(3);
-};
-main();

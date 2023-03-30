@@ -1,4 +1,5 @@
 import { Router } from "express";
+// import { body, validationResult } from "express-validator";
 import ProductManager from "../models/productManager.js";
 
 const productRouter = Router();
@@ -21,12 +22,28 @@ productRouter.get("/:productId", async (req, res) => {
   res.status(200).json(product);
 });
 
-productRouter.post("/", (req, res) => {
-  const { name, stock } = req.body;
-  const product = { name, stock };
-  products.push(product);
-
-  res.status(201).json(products);
+productRouter.post("/", async (req, res) => {
+  const {
+    title,
+    description,
+    code,
+    price,
+    status,
+    stock,
+    category,
+    thumbnails,
+  } = req.body;
+  const newProduct = await productManager.createProduct({
+    title,
+    description,
+    code,
+    price,
+    status,
+    stock,
+    category,
+    thumbnails,
+  });
+  return res.status(201).json(newProduct);
 });
 
 export default productRouter;
