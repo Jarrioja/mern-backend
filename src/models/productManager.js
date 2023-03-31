@@ -39,20 +39,21 @@ export default class ProductManager {
   }
 
   async createProduct({
+    code,
     title,
     description,
     price,
-    thumbnails,
-    code,
+    status,
     stock,
     category,
+    thumbnails,
   }) {
     try {
+      const products = await this.loadProducts();
       if (
         title === undefined ||
         description === undefined ||
         price === undefined ||
-        thumbnails === undefined ||
         code === undefined ||
         stock === undefined ||
         category === undefined
@@ -63,21 +64,22 @@ export default class ProductManager {
       if (sameCode) {
         throw Error("El codigo del producto esta repetido");
       }
-      const products = await this.loadProducts();
+
       if (!products.length) {
         this.#idAuto = 1;
       } else {
         this.#idAuto = products[products.length - 1].id + 1;
       }
       const product = {
+        id: this.#idAuto,
+        code,
         title,
         description,
         price,
-        thumbnails,
+        status: status || true,
         category,
-        code,
         stock,
-        id: this.#idAuto,
+        thumbnails: thumbnails || [],
       };
 
       products.push(product);
@@ -103,12 +105,17 @@ export default class ProductManager {
 
   async updateProductById(productId, newProductData) {
     try {
-      const index = this.#products.findIndex((p) => p.id === productId);
+      const products = await this.loadProducts();
+      const index = products.findIndex((p) => p.id === productId);
       if (index < 0) {
         throw Error(`No se encontró ningún producto con id ${productId}.`);
       }
-      this.#products[index] = { ...newProductData, id: productId };
-      await this.updateFile(this.#products);
+      products[index] = {
+        id: productId,
+        ...products[index],
+        ...newProductData,
+      };
+      await this.updateFile(products);
       console.log(`Producto con id ${productId} actualizado correctamente.`);
     } catch (error) {
       console.log(error);
@@ -117,12 +124,13 @@ export default class ProductManager {
 
   async removeProductById(productId) {
     try {
-      const index = this.#products.findIndex((p) => p.id === productId);
+      const products = await this.loadProducts();
+      const index = products.findIndex((p) => p.id === productId);
       if (index < 0) {
         throw Error(`No se encontró ningún producto con id ${productId}.`);
       }
-      this.#products.splice(index, 1);
-      await this.updateFile(this.#products);
+      products.splice(index, 1);
+      await this.updateFile(products);
       console.log(`Producto con id ${productId} eliminado correctamente.`);
     } catch (error) {
       console.log(error);
