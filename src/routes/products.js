@@ -63,6 +63,8 @@ productRouter.post(
       return res.status(403).json({
         message: `Ya existe un producto con el codigo '${code}'`,
       });
+    const io = req.app.get("io");
+    io.emit("productAdded", newProduct);
     return res.status(201).json({ message: newProduct });
   }
 );
@@ -79,10 +81,14 @@ productRouter.put("/:productId", async (req, res) => {
 productRouter.delete("/:productId", async (req, res) => {
   const productId = +req.params.productId;
   const deletedProduct = await productManager.removeProductById(productId);
-  if (!deletedProduct)
+  console.log(deletedProduct);
+  if (!deletedProduct) {
     return res.status(404).json({
       message: `Producto '${productId}' no encontrado`,
     });
+  }
+  const io = req.app.get("io");
+  io.emit("productDeleted", productId);
   return res.status(200).json(`Producto '${productId}' eliminado`);
 });
 export default productRouter;

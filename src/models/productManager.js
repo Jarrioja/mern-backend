@@ -84,7 +84,7 @@ export default class ProductManager {
 
       products.push(product);
       await this.updateFile(products);
-      return `Producto con id ${product.id} creado correctamente.`;
+      return product;
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +131,7 @@ export default class ProductManager {
       }
       products.splice(index, 1);
       await this.updateFile(products);
-      console.log(`Producto con id ${productId} eliminado correctamente.`);
+      return `Producto con id ${productId} eliminado correctamente.`;
     } catch (error) {
       console.log(error);
     }
