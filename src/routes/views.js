@@ -43,7 +43,6 @@ viewsRouter.get("/realtimeproducts", async function (req, res) {
       });
       console.log(newProduct);
       if (newProduct) {
-        console.log(`added product id ${productId}`);
         socket.emit("productAdded", newProduct);
       }
     });
