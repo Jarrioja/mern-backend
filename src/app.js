@@ -8,7 +8,6 @@ import { Server } from "socket.io";
 import productRouter from "./routes/products.js";
 import cartRouter from "./routes/carts.js";
 import viewsRouter from "./routes/views.js";
-import ProductManager from "./models/productManager.js";
 
 const PORT = process.env.PORT || 5000;
 
