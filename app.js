@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const viewsPath = resolve("src/views");
+const viewsPath = resolve("views");
 app.engine(
   "handlebars",
   engine({

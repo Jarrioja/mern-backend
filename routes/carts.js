@@ -25,11 +25,9 @@ cartRouter.post("/:cartId/proudct/:productId/", async (req, res) => {
   const addProduct = await cartMamager.addProduct(cartId, productId);
   if (!addProduct)
     return res.status(404).json({ message: "Carrito o Producto no existe" });
-  return res
-    .status(201)
-    .json({
-      message: `Producto ${productId} agregado exitosamente al carrito ${cartId}`,
-    });
+  return res.status(201).json({
+    message: `Producto ${productId} agregado exitosamente al carrito ${cartId}`,
+  });
 });
 
 export default cartRouter;
