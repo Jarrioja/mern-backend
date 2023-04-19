@@ -8,9 +8,9 @@ import { Server } from "socket.io";
 import productRouter from "./routes/products.js";
 import cartRouter from "./routes/carts.js";
 import viewsRouter from "./routes/views.js";
+import { connectDB } from "./db/mongoConnection.js";
 
 const PORT = process.env.PORT || 5000;
-
 const app = express();
 
 app.use(express.json());
@@ -36,3 +36,4 @@ const httpServer = app.listen(PORT, () => {
 });
 const io = new Server(httpServer);
 app.set("io", io);
+connectDB(process.env.MONGO_URI);
