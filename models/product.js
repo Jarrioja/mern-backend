@@ -4,6 +4,7 @@ const productSchema = new Schema({
   code: {
     type: String,
     require: true,
+    unique: true,
   },
   title: {
     type: String,
@@ -19,7 +20,7 @@ const productSchema = new Schema({
   },
   status: {
     type: Boolean,
-    require: true,
+    default: true,
   },
   stock: {
     type: String,

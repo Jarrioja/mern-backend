@@ -1,6 +1,5 @@
 import { validationResult } from "express-validator";
 import { Product } from "../models/product.js";
-// const product = new Product({});
 
 const postAddProduct = async (req, res) => {
   const errors = validationResult(req);
@@ -17,7 +16,12 @@ const postAddProduct = async (req, res) => {
     category,
     thumbnails,
   } = req.body;
-
+  const sameCode = await Product.find({ code: code });
+  if (sameCode.length > 0) {
+    return res.status(403).json({
+      message: `Ya existe un producto con el codigo '${code}'`,
+    });
+  }
   const product = new Product({
     title: title,
     description: description,
@@ -28,17 +32,90 @@ const postAddProduct = async (req, res) => {
     category: category,
     thumbnails: thumbnails,
   });
-
-  if (!product)
-    return res.status(403).json({
-      message: `Ya existe un producto con el codigo '${code}'`,
+  const savedProduct = await product.save();
+  if (!savedProduct) {
+    return res.status(503).json({
+      message: `Error de Conecxion`,
     });
-  await product.save();
+  }
   const io = req.app.get("io");
   io.emit("productAdded", product);
   return res.status(201).json({ message: product });
 };
 
-const getProducts = async (req, res) => {};
+const getProducts = async (req, res) => {
+  try {
+    const limit = +req.query.limit;
+    if (!limit) {
+      const products = await Product.find();
+      return res.status(200).json(products);
+    }
+    const products = await Product.find().limit(limit);
+    return res.status(200).json(products);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: `Error de servidor`,
+      error: error,
+    });
+  }
+};
 
-export { postAddProduct, getProducts };
+const getProductById = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const product = await Product.findById({ _id: productId });
+    if (!product)
+      return res.status(404).json({ message: "Producto no existe" });
+    return res.status(200).json(product);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: `Error de servidor`,
+      error: error,
+    });
+  }
+};
+
+const putEditProduct = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const productId = { _id: req.params.productId };
+    const newProductData = req.body;
+    const products = await Product.findByIdAndUpdate(productId, newProductData);
+    console.log(products);
+    if (!products)
+      return res.status(404).json({ message: "Producto no existe" });
+    return res.status(203).json(products);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: `Error de servidor`,
+      error: error,
+    });
+  }
+};
+
+const deleteProductById = async (req, res) => {
+  const productId = { _id: req.params.productId };
+  const deletedProduct = await Product.findByIdAndDelete(productId);
+  if (!deletedProduct) {
+    return res.status(404).json({
+      message: `Producto '${productId._id}' no encontrado`,
+    });
+  }
+  const io = req.app.get("io");
+  io.emit("productDeleted", productId._id);
+  return res.status(200).json(`Producto '${productId._id}' eliminado`);
+};
+
+export {
+  postAddProduct,
+  getProducts,
+  getProductById,
+  putEditProduct,
+  deleteProductById,
+};
