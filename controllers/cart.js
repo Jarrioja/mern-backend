@@ -1,4 +1,5 @@
 import { Cart } from "../models/cart.js";
+import { Product } from "../models/product.js";
 
 const getCreateCart = async (req, res) => {
   try {
@@ -8,40 +9,46 @@ const getCreateCart = async (req, res) => {
     cart.save();
     return res.status(201).json({ message: "Carrito creado exitosamente" });
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({
-      message: `Error de servidor`,
-      error: error,
-    });
+    return res.status(500).json({ error: e.message });
   }
 };
 
 const getCartById = async (req, res) => {
   try {
     const cartId = { _id: req.params.cartId };
-    const [{ products }] = await Cart.find(cartId);
+    const { products } = await Cart.findById(cartId);
+    if (!products.length)
+      return res.status(200).json({ message: "Carrito Vacio" });
     return res.status(200).json(products);
-  } catch (error) {
-    return res.status(404).json({ message: "Carrito Vacio" });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
 };
 
 const postAddToCart = async (req, res) => {
   try {
     const cartId = req.params.cartId;
-    console.log(cartId);
-    const newProduct = {
-      _id: req.params.productId,
-      quantity: 1,
-    };
-    const filter = { _id: cartId };
-    const update = { $push: { products: newProduct } };
+    const productId = req.params.productId;
+    // Buscar el carrito
+    const cart = await Cart.findById({ _id: cartId });
+    if (!cart) return res.status(404).json({ error: "Carrito no encontrado" });
+    // Buscar el producto
+    const product = await Product.findById({ _id: productId });
+    if (!product)
+      return res.status(404).json({ error: "Producto no encontrado" });
+    // Buscar si el produco existe en el carrito
+    const productInCart = cart.products.find((p) => p._id.equals(productId));
+    // Si el producto ya está en el carrito, incrementar la cantidad
+    if (productInCart) productInCart.quantity += 1;
+    // Si el producto no está en el carrito, agregarlo
+    else cart.products.push({ _id: productId, quantity: 1 });
+    // Actualizar el carrito
+    const updatedCart = await cart.save();
 
-    //Agregar suma de quantity cuando ya existe el producto
-    const addedToCart = await Cart.findOneAndUpdate(filter, update);
-    return res.status(201).json(addedToCart);
+    return res.status(201).json(updatedCart);
   } catch (e) {
-    return res.status(404).json({ message: e });
+    console.log("🚀 ~ file: cart.js:57 ~ postAddToCart ~ e:", e);
+    return res.status(500).json({ error: e.message });
   }
 };
 
