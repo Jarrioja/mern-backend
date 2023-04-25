@@ -7,7 +7,7 @@ const getCreateCart = async (req, res) => {
       products: [],
     });
     cart.save();
-    return res.status(201).json({ message: "Carrito creado exitosamente" });
+    return res.status(201).json(cart);
   } catch (error) {
     return res.status(500).json({ error: e.message });
   }
