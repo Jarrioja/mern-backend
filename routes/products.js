@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { body } from "express-validator";
 import {
   postAddProduct,
   getProducts,
@@ -7,6 +6,7 @@ import {
   putEditProduct,
   deleteProductById,
 } from "../controllers/product.js";
+import { validateProduct } from "../middleware/validations.js";
 
 const productRouter = Router();
 
@@ -14,31 +14,9 @@ productRouter.get("/", getProducts);
 
 productRouter.get("/:productId", getProductById);
 
-productRouter.post(
-  "/",
-  [
-    body("title").trim().notEmpty(),
-    body("description").trim().notEmpty(),
-    body("code").trim().notEmpty(),
-    body("price").isNumeric().toFloat(),
-    body("stock").isNumeric().toInt(),
-    body("category").trim().notEmpty(),
-  ],
-  postAddProduct
-);
+productRouter.post("/", validateProduct, postAddProduct);
 
-productRouter.put(
-  "/:productId",
-  [
-    body("title").trim().notEmpty(),
-    body("description").trim().notEmpty(),
-    body("code").trim().notEmpty(),
-    body("price").isNumeric().toFloat(),
-    body("stock").isNumeric().toInt(),
-    body("category").trim().notEmpty(),
-  ],
-  putEditProduct
-);
+productRouter.put("/:productId", validateProduct, putEditProduct);
 
 productRouter.delete("/:productId", deleteProductById);
 export default productRouter;
