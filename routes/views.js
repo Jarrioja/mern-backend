@@ -5,6 +5,10 @@ const viewsRouter = Router();
 const productManager = new ProductManager("products.json");
 
 viewsRouter.get("/", async function (req, res) {
+  res.render("index", {});
+});
+
+viewsRouter.get("/products", async function (req, res) {
   const products = await productManager.readFile();
 
   res.render("home", {
@@ -12,6 +16,7 @@ viewsRouter.get("/", async function (req, res) {
     products: products,
   });
 });
+
 viewsRouter.get("/realtimeproducts", async function (req, res) {
   const products = await productManager.readFile();
   const io = req.app.get("io");
