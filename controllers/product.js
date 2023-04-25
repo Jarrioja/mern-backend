@@ -35,12 +35,14 @@ const postAddProduct = async (req, res) => {
   const savedProduct = await product.save();
   if (!savedProduct) {
     return res.status(503).json({
-      message: `Error de Conecxion`,
+      errors: `Error de Conecxion`,
     });
   }
-  const io = req.app.get("io");
-  io.emit("productAdded", product);
-  return res.status(201).json({ message: product });
+  console.log(
+    "🚀 ~ file: product.js:36 ~ postAddProduct ~ savedProduct:",
+    savedProduct
+  );
+  return res.status(201).json(savedProduct);
 };
 
 const getProducts = async (req, res) => {
@@ -85,10 +87,19 @@ const putEditProduct = async (req, res) => {
     }
     const productId = { _id: req.params.productId };
     const newProductData = req.body;
-    const products = await Product.findByIdAndUpdate(productId, newProductData);
-    console.log(products);
+    const options = { new: true };
+    const products = await Product.findByIdAndUpdate(
+      productId,
+      newProductData,
+      options
+    );
+
     if (!products)
       return res.status(404).json({ message: "Producto no existe" });
+    console.log(
+      "🚀 ~ file: product.js:93 ~ putEditProduct ~ products:",
+      products
+    );
     return res.status(203).json(products);
   } catch (error) {
     console.log(error);
@@ -107,8 +118,6 @@ const deleteProductById = async (req, res) => {
       message: `Producto '${productId._id}' no encontrado`,
     });
   }
-  const io = req.app.get("io");
-  io.emit("productDeleted", productId._id);
   return res.status(200).json(`Producto '${productId._id}' eliminado`);
 };
 
