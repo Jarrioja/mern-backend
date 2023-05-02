@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-  postAddProduct,
+  createProduct,
   getProducts,
   getProductById,
-  putEditProduct,
-  deleteProductById,
+  updateProduct,
+  deleteProduct,
 } from "../controllers/product.js";
 import { validateProduct } from "../middleware/validations.js";
 
@@ -14,9 +14,9 @@ productRouter.get("/", getProducts);
 
 productRouter.get("/:productId", getProductById);
 
-productRouter.post("/", validateProduct, postAddProduct);
+productRouter.post("/", validateProduct, createProduct);
 
-productRouter.put("/:productId", validateProduct, putEditProduct);
+productRouter.put("/:productId", validateProduct, updateProduct);
 
-productRouter.delete("/:productId", deleteProductById);
+productRouter.delete("/:productId", deleteProduct);
 export default productRouter;
