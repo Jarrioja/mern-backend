@@ -5,8 +5,8 @@ class ProductManager {
     this.dao = new ProductMongoDao();
   }
 
-  async find(limit) {
-    return await this.dao.find(limit);
+  async find(params) {
+    return await this.dao.find(params);
   }
 
   async findById(id) {

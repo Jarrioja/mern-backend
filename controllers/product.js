@@ -3,15 +3,25 @@ import ProductManager from "../managers/productManager.js";
 
 const getProducts = async (req, res) => {
   try {
-    const limit = +req.query.limit;
     const manager = new ProductManager();
-    const products = await manager.find(limit);
-    return res.status(200).json({ status: "success", payload: products });
+    const { products, pagination } = await manager.find(req.query);
+    return res.status(200).json({
+      status: "success",
+      payload: products,
+      totalPages: pagination.totalPages,
+      prevPage: pagination.prevPage,
+      nextPage: pagination.nextPage,
+      page: pagination.page,
+      hasNextPage: pagination.hasNextPage,
+      hasPrevPage: pagination.hasPrevPage,
+      nextLink: pagination.nextLink,
+      prevLink: pagination.prevLink,
+    });
   } catch (error) {
     const statusCode = error.statusCode || 500;
     return res.status(statusCode).json({
       status: "error",
-      error: error,
+      error: error.message,
     });
   }
 };
