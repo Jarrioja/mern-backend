@@ -58,8 +58,8 @@ class ProductMongoDao {
       },
     };
   }
-  async findById(id) {
-    const productDocument = await Product.findById(id);
+  async findById(productId) {
+    const productDocument = await Product.findById(productId);
     return {
       id: productDocument._id,
       code: productDocument.code,
@@ -95,10 +95,10 @@ class ProductMongoDao {
       thumbnails: productDocument.thumbnails,
     };
   }
-  async update(id, product) {
+  async update(productId, product) {
     const options = { new: true };
     const productDocument = await Product.findByIdAndUpdate(
-      id,
+      productId,
       product,
       options
     );
@@ -118,8 +118,8 @@ class ProductMongoDao {
       thumbnails: productDocument.thumbnails,
     };
   }
-  async delete(id) {
-    const productDocument = await Product.findByIdAndDelete(id);
+  async delete(productId) {
+    const productDocument = await Product.findByIdAndDelete(productId);
     if (!productDocument) {
       throw { message: "El producto no existe", statusCode: 404 };
     }

@@ -9,7 +9,8 @@ class CartMongoDao {
       products: cartDocument.products,
     };
   }
-  async create() {
+
+  async createCart() {
     const cartDocument = new Cart({
       products: [],
     });
@@ -39,6 +40,7 @@ class CartMongoDao {
       products: cartDocument.products,
     };
   }
+
   async deleteProduct(cartId, productId) {
     const cartDocument = await Cart.findById(cartId);
     if (!cartDocument)
@@ -59,6 +61,7 @@ class CartMongoDao {
       products: cartDocument.products,
     };
   }
+
   async updateCart(cartId, products) {
     const cartDocument = await Cart.findById(cartId);
     if (!cartDocument)
@@ -70,6 +73,7 @@ class CartMongoDao {
       products: cartDocument.products,
     };
   }
+
   async updateQuantity(cartId, productId, quantity) {
     const cartDocument = await Cart.findById(cartId);
     if (!cartDocument)
@@ -89,6 +93,7 @@ class CartMongoDao {
       products: cartDocument.products,
     };
   }
+
   async emptyCart(cartId) {
     const cartDocument = await Cart.findById(cartId);
     if (!cartDocument)

@@ -10,7 +10,7 @@ class CartManager {
   }
 
   async create() {
-    return await this.dao.create();
+    return await this.dao.createCart();
   }
 
   async addProduct(cartId, productId) {
