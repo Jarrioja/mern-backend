@@ -8,14 +8,7 @@ const getProducts = async (req, res) => {
     return res.status(200).json({
       status: "success",
       payload: products,
-      totalPages: pagination.totalPages,
-      prevPage: pagination.prevPage,
-      nextPage: pagination.nextPage,
-      page: pagination.page,
-      hasNextPage: pagination.hasNextPage,
-      hasPrevPage: pagination.hasPrevPage,
-      nextLink: pagination.nextLink,
-      prevLink: pagination.prevLink,
+      ...pagination,
     });
   } catch (error) {
     const statusCode = error.statusCode || 500;
