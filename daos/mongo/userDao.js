@@ -29,14 +29,14 @@ export default class UserDao {
       role: userDocument?.role,
     };
   }
-  async createUser(user) {
-    const userExists = await User.findOne({ email: user.email });
+  async createUser(newUser) {
+    const userExists = await User.findOne({ email: newUser.email });
     if (userExists)
       throw {
         message: "User already exists",
         statusCode: 409,
       };
-    const userDocument = new User(user);
+    const userDocument = new User(newUser);
     await userDocument.save();
     return {
       id: userDocument?._id,
@@ -45,6 +45,7 @@ export default class UserDao {
       role: userDocument?.role,
     };
   }
+
   async updateUser(userId, user) {
     const userDocument = await User.findByIdAndUpdate(userId, user, {
       new: true,

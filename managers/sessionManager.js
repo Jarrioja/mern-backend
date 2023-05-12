@@ -12,16 +12,13 @@ class SessionManager {
     return user;
   }
 
-  async logout(email) {
-    return await this.userDao.findByEmail(email);
-  }
-
-  async register(user) {
-    const { email, password } = user;
+  async signup(user) {
+    const { email, password, role } = user;
     const encryptedPassword = await createHash(password);
     const newUser = {
       email,
       password: encryptedPassword,
+      role,
     };
     return await this.userDao.createUser(newUser);
   }
