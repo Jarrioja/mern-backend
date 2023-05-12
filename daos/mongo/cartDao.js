@@ -1,6 +1,7 @@
-import { Cart } from "../../models/cart.js";
-import { Product } from "../../models/product.js";
-class CartMongoDao {
+import { Cart } from "../../models/cartModel.js";
+import { Product } from "../../models/productModel.js";
+
+export default class CartMongoDao {
   async findById(cartId) {
     const cartDocument = await Cart.findById(cartId);
 
@@ -106,5 +107,3 @@ class CartMongoDao {
     };
   }
 }
-
-export { CartMongoDao };

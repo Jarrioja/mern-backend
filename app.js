@@ -2,9 +2,11 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 
-import productRouter from "./routes/products.js";
-import cartRouter from "./routes/carts.js";
+import productRouter from "./routes/productsRoute.js";
+import cartRouter from "./routes/cartsRoute.js";
 import { connectDB } from "./db/mongoConnection.js";
+import userRouter from "./routes/usersRoute.js";
+import sessionRouter from "./routes/sessionsRoute.js";
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -12,6 +14,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/api/sessions", sessionRouter);
+app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 

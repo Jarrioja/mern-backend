@@ -1,4 +1,4 @@
-import { ProductMongoDao } from "../db/mongo/ProductMongoDao.js";
+import ProductMongoDao from "../daos/mongo/productDao.js";
 
 class ProductManager {
   constructor() {
@@ -14,15 +14,15 @@ class ProductManager {
   }
 
   async create(product) {
-    return await this.dao.create(product);
+    return await this.dao.createProduct(product);
   }
 
   async update(id, product) {
-    return await this.dao.update(id, product);
+    return await this.dao.updateUser(id, product);
   }
 
   async delete(id) {
-    return await this.dao.delete(id);
+    return await this.dao.deleteUser(id);
   }
 }
 

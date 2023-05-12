@@ -5,8 +5,8 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
-} from "../controllers/product.js";
-import { validateProduct } from "../middleware/validations.js";
+} from "../controllers/productController.js.js";
+import { validateProduct } from "../middlewares/validations.js";
 
 const productRouter = Router();
 

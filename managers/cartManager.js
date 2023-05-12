@@ -1,4 +1,4 @@
-import { CartMongoDao } from "../db/mongo/CartMongoDao.js";
+import CartMongoDao from "../daos/mongo/cartDao.js";
 
 class CartManager {
   constructor() {

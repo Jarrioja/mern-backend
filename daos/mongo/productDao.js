@@ -1,6 +1,6 @@
-import { Product } from "../../models/product.js";
+import { Product } from "../../models/productModel.js";
 
-class ProductMongoDao {
+export default class ProductMongoDao {
   async find({ limit, sort, category, status, page }) {
     let paginateQuery = {};
     if (category) {
@@ -72,7 +72,7 @@ class ProductMongoDao {
       thumbnails: productDocument.thumbnails,
     };
   }
-  async create(product) {
+  async createProduct(product) {
     const sameCode = await Product.findOne({ code: product.code });
     if (sameCode) {
       throw {
@@ -95,7 +95,7 @@ class ProductMongoDao {
       thumbnails: productDocument.thumbnails,
     };
   }
-  async update(productId, product) {
+  async updateUser(productId, product) {
     const options = { new: true };
     const productDocument = await Product.findByIdAndUpdate(
       productId,
@@ -118,7 +118,7 @@ class ProductMongoDao {
       thumbnails: productDocument.thumbnails,
     };
   }
-  async delete(productId) {
+  async deleteUser(productId) {
     const productDocument = await Product.findByIdAndDelete(productId);
     if (!productDocument) {
       throw { message: "El producto no existe", statusCode: 404 };
@@ -130,4 +130,3 @@ class ProductMongoDao {
     };
   }
 }
-export { ProductMongoDao };
