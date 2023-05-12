@@ -1,21 +1,25 @@
-import UserDao from "../daos/mongo/userDao";
+import UserDao from "../daos/mongo/userDao.js";
 
 class UserManager {
   constructor() {
     this.userDao = new UserDao();
   }
 
-  async findById(userId) {
-    return await this.userDao.findById(userId);
+  async getUsers(params) {
+    return await this.userDao.getUsers(params);
   }
 
-  async findByEmail(email) {
-    return await this.userDao.findByEmail(email);
+  async getUserById(userId) {
+    return await this.userDao.getUserById(userId);
+  }
+
+  async getUserByEmail(email) {
+    return await this.userDao.getUserByEmail(email);
   }
 
   async createUser(user) {
-    const user = await this.userDao.createUser(user);
-    return { ...user, password: undefined };
+    const newUser = await this.userDao.createUser(user);
+    return { ...newUser, password: undefined };
   }
 
   async updateUser(userId, user) {
