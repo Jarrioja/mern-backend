@@ -3,7 +3,7 @@ import UserManager from "../managers/userManager.js";
 
 const manager = new UserManager();
 
-const getUsers = async (req, res) => {
+const getUsers = async (req, res, next) => {
   try {
     const users = await manager.getUsers(req.query);
     return res.status(200).json({
@@ -11,15 +11,11 @@ const getUsers = async (req, res) => {
       payload: users,
     });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: "error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getUserById = async (req, res) => {
+const getUserById = async (req, res, next) => {
   try {
     const user = await manager.getUserById(req.params.id);
     return res.status(200).json({
@@ -27,15 +23,11 @@ const getUserById = async (req, res) => {
       payload: user,
     });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: "error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -47,15 +39,11 @@ const createUser = async (req, res) => {
       payload: user,
     });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: "error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -67,15 +55,11 @@ const updateUser = async (req, res) => {
       payload: user,
     });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: "error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   try {
     await manager.deleteUser(req.params.id);
     return res.status(200).json({
@@ -83,11 +67,7 @@ const deleteUser = async (req, res) => {
       message: "User deleted successfully",
     });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: "error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 export { getUsers, getUserById, createUser, updateUser, deleteUser };

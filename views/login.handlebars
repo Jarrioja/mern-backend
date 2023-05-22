@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-family: "Arial", sans-serif;
+        background-color: #0d1117;
+        color: #c9d1d9;
+    }
+    
+    .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #161b22;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    input[type="email"],
+    input[type="password"],
+    select {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #0d1117;
+        color: #c9d1d9;
+        border: 1px solid #30363d;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #238636;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    a button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #6f42c1;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        display: block;
+    }
+    
+    a {
+        text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+        <h1>Log in</h1>
+        <form id="loginForm" action="/login" method="POST">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Log in</button>
+        </form>
+        <hr>
+        <a href="api/sessions/github">
+            <button>Log in with GitHub</button>
+        </a>
+    </div>
+    <div>
+        <h1>Sign up</h1>
+        <form id="registerForm" action="/login" method="POST">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                </select>
+            </div>
+            <button type="submit">Sign up</button>
+        </form>
+    </div>
+  </div>
+  <script>
+    document.querySelector('#loginForm').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
+
+        const formData = new FormData(event.target); // Obtener los datos del formulario
+        const jsonData = {};
+
+        for (const [key, value] of formData.entries()) {
+            jsonData[key] = value;
+        }
+
+        try {
+            const response = await fetch('/api/sessions/login-passport', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            });
+
+            const data = await response.json(); // Obtener la respuesta como JSON
+
+            // Hacer algo con la respuesta recibida
+            console.log(data);
+            if (response.status === 200) {
+                window.location.href = "http://localhost:5000/";
+            } else {
+                alert('Error');
+            }
+        } catch (error) {
+            // Manejar cualquier error de la solicitud
+            console.error(error);
+        }
+    });
+
+    document.querySelector('#registerForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const jsonData = {};
+
+    for (const [key, value] of formData.entries()) {
+      jsonData[key] = value;
+    }
+
+    try {
+      const response = await fetch('/api/sessions/signup-passport', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData),
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (response.status === 200) {
+        // Registro exitoso, redireccionar a otra página
+        alert('Registro exitoso');
+      } else {
+        // Mostrar mensaje de error al usuario
+        alert('Error al registrar');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+  </script>
+</body>
+</html>

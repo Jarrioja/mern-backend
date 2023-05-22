@@ -29,7 +29,6 @@ export default class UserDao {
     if (!userDocument)
       throw {
         message: "User not found",
-        statusCode: 404,
       };
     return {
       id: userDocument?._id,
@@ -40,11 +39,11 @@ export default class UserDao {
   }
   async getUserByEmail(email) {
     const userDocument = await User.findOne({ email });
-    if (!userDocument)
-      throw {
-        message: "User not found",
-        statusCode: 404,
-      };
+    // FIX PARA PASSPORT
+    // if (!userDocument)
+    //   throw {
+    //     message: "User not found",
+    //   };
     return {
       id: userDocument?._id,
       email: userDocument?.email,
@@ -57,7 +56,6 @@ export default class UserDao {
     if (userExists)
       throw {
         message: "User already exists",
-        statusCode: 409,
       };
     const userDocument = new User(newUser);
     await userDocument.save();
@@ -74,7 +72,6 @@ export default class UserDao {
     if (emailExists)
       throw {
         message: "Email already exists",
-        statusCode: 409,
       };
     const userDocument = await User.findByIdAndUpdate(userId, user, {
       new: true,
@@ -82,7 +79,6 @@ export default class UserDao {
     if (!userDocument)
       throw {
         message: "User not found",
-        statusCode: 404,
       };
 
     return {
@@ -97,7 +93,6 @@ export default class UserDao {
     if (!userDocument)
       throw {
         message: "User not found",
-        statusCode: 404,
       };
     return {
       id: userDocument?._id,

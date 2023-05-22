@@ -77,7 +77,6 @@ export default class ProductMongoDao {
     if (sameCode) {
       throw {
         message: "El codigo del producto ya existe",
-        statusCode: 409,
       };
     }
     const productDocument = new Product(product);
@@ -103,7 +102,7 @@ export default class ProductMongoDao {
       options
     );
     if (!productDocument) {
-      throw { message: "El producto no existe", statusCode: 404 };
+      throw { message: "El producto no existe" };
     }
 
     return {
@@ -121,7 +120,7 @@ export default class ProductMongoDao {
   async deleteUser(productId) {
     const productDocument = await Product.findByIdAndDelete(productId);
     if (!productDocument) {
-      throw { message: "El producto no existe", statusCode: 404 };
+      throw { message: "El producto no existe" };
     }
     return {
       id: productDocument._id,

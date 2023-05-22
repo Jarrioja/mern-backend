@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Información de usuario</title>
+  <style>
+    body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #0d1117;
+  color: #c9d1d9;
+  font-family: "Arial", sans-serif;
+}
+
+.container {
+  max-width: 400px;
+  padding: 40px;
+  background-color: #161b22;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #c9d1d9;
+}
+
+.info {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #161b22;
+  border-radius: 4px;
+  color: #c9d1d9;
+}
+
+.email {
+  font-weight: bold;
+  color: #58a6ff;
+}
+
+.role {
+  font-weight: bold;
+  color: #6f42c1;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Información de usuario</h1>
+    <div class="info">
+      Hola, tu correo es <span class="email">{{email}}</span> y tu rol <span class="role">{{role}}</span>
+    </div>
+  </div>
+</body>
+</html>

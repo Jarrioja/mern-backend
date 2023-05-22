@@ -24,11 +24,10 @@ export default class CartMongoDao {
 
   async addProduct(cartId, productId) {
     const cartDocument = await Cart.findById(cartId);
-    if (!cartDocument)
-      throw { message: "Carrito no encontrado", statusCode: 404 };
+    if (!cartDocument) throw { message: "Cart not found" };
 
     const product = await Product.findById(productId);
-    if (!product) throw { message: "Producto no encontrado", statusCode: 404 };
+    if (!product) throw { message: "Product not found" };
 
     const productInCart = cartDocument.products.find((p) =>
       p.product.equals(productId)
@@ -44,11 +43,10 @@ export default class CartMongoDao {
 
   async deleteProduct(cartId, productId) {
     const cartDocument = await Cart.findById(cartId);
-    if (!cartDocument)
-      throw { message: "Carrito no encontrado", statusCode: 404 };
+    if (!cartDocument) throw { message: "Cart not found" };
 
     const product = await Product.findById(productId);
-    if (!product) throw { message: "Producto no encontrado", statusCode: 404 };
+    if (!product) throw { message: "Product not found" };
 
     const index = cartDocument.products.findIndex((p) => {
       return p._id.equals(productId);
@@ -65,8 +63,7 @@ export default class CartMongoDao {
 
   async updateCart(cartId, products) {
     const cartDocument = await Cart.findById(cartId);
-    if (!cartDocument)
-      throw { message: "Carrito no encontrado", statusCode: 404 };
+    if (!cartDocument) throw { message: "Cart not found" };
     cartDocument.products = products;
     await cartDocument.save();
     return {
@@ -77,10 +74,9 @@ export default class CartMongoDao {
 
   async updateQuantity(cartId, productId, quantity) {
     const cartDocument = await Cart.findById(cartId);
-    if (!cartDocument)
-      throw { message: "Carrito no encontrado", statusCode: 404 };
+    if (!cartDocument) throw { message: "Cart not found" };
     const product = await Product.findById(productId);
-    if (!product) throw { message: "Producto no encontrado", statusCode: 404 };
+    if (!product) throw { message: "Product not found" };
 
     const productInCart = cartDocument.products.find((p) =>
       p.product.equals(productId)
@@ -97,8 +93,7 @@ export default class CartMongoDao {
 
   async emptyCart(cartId) {
     const cartDocument = await Cart.findById(cartId);
-    if (!cartDocument)
-      throw { message: "Carrito no encontrado", statusCode: 404 };
+    if (!cartDocument) throw { message: "Cart not found" };
     cartDocument.products = [];
     await cartDocument.save();
     return {

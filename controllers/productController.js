@@ -11,11 +11,7 @@ const getProducts = async (req, res) => {
       ...pagination,
     });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: "error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
@@ -26,11 +22,7 @@ const getProductById = async (req, res) => {
     const product = await manager.findById(productId);
     return res.status(200).json({ status: "success", payload: product });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: `error`,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
@@ -44,11 +36,7 @@ const createProduct = async (req, res) => {
     const product = await manager.create(req.body);
     return res.status(201).json({ status: "success", payload: product });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: `error`,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
@@ -62,11 +50,7 @@ const updateProduct = async (req, res) => {
     const product = await manager.update(req.params.productId, req.body);
     return res.status(201).json({ status: "success", payload: product });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    return res.status(statusCode).json({
-      status: `error`,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
@@ -76,12 +60,7 @@ const deleteProduct = async (req, res) => {
     const product = await manager.delete(req.params.productId);
     return res.status(201).json({ status: "success", payload: product });
   } catch (error) {
-    const statusCode = error.statusCode || 500;
-    console.log(error.message.message);
-    return res.status(statusCode).json({
-      status: `error`,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
