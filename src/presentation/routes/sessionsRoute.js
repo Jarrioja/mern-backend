@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport from "passport";
 import {
   login,
   logout,
@@ -7,10 +8,8 @@ import {
   loginPassport,
   failed,
   current,
-} from "../../src/controllers/sessionController.js";
-import passport from "passport";
-import authenticate from "../middlewares/authenticate.js";
-import authorization from "../middlewares/authtorization.js";
+} from "../../presentation/controllers/sessionController.js";
+import authenticate from "../../presentation/middlewares/authenticate.js";
 
 const sessionRouter = Router();
 

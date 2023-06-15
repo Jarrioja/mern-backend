@@ -1,8 +1,8 @@
 import { z } from "zod";
-import SessionManager from "../managers/sessionManager.js";
-import UserMangaer from "../managers/userManager.js";
-import loginValidation from "../validations/session/loginValidation.js";
-import { decodeToken, generateToken } from "../utils/jwt.js";
+import SessionManager from "../../domain/managers/sessionManager.js";
+import UserMangaer from "../../domain/managers/userManager.js";
+import loginValidation from "../../domain/validations/session/loginValidation.js";
+import { decodeToken, generateToken } from "../../common/jwt.js";
 
 export const signup = async (req, res, next) => {
   try {

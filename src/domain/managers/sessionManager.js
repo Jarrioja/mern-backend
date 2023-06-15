@@ -1,6 +1,5 @@
-import UserMongoDao from "../daos/mongo/userMongoDao.js";
-import { createHash, isValidPassword } from "../utils/encrypt.js";
-import CartManager from "./cartManager.js";
+import UserMongoDao from "../../data/daos/mongo/userMongoDao.js";
+import { createHash, isValidPassword } from "../../common/encrypt.js";
 class SessionManager {
   constructor() {
     this.userDao = new UserMongoDao();

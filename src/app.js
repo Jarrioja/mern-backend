@@ -8,15 +8,15 @@ import passport from "passport";
 import { engine } from "express-handlebars";
 import { resolve } from "path";
 
-import { connectDB } from "./db/mongoConnection.js";
+import { connectDB } from "./data/db/mongoConnection.js";
 import initializePassport from "./config/passport.config.js";
-import productRouter from "./routes/productsRoute.js";
-import cartRouter from "./routes/cartsRoute.js";
-import userRouter from "./routes/usersRoute.js";
-import sessionRouter from "./routes/sessionsRoute.js";
-import logger from "./middlewares/logger.js";
-import errorHandler from "./middlewares/errorHandler.js";
-import roleRouter from "./routes/roleRoute.js";
+import productRouter from "./presentation/routes/productsRoute.js";
+import cartRouter from "./presentation/routes/cartsRoute.js";
+import userRouter from "./presentation/routes/usersRoute.js";
+import sessionRouter from "./presentation/routes/sessionsRoute.js";
+import logger from "./presentation/middlewares/logger.js";
+import errorHandler from "./presentation/middlewares/errorHandler.js";
+import roleRouter from "./presentation/routes/roleRoute.js";
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URI;

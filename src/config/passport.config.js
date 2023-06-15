@@ -3,8 +3,8 @@ dotenv.config();
 import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
-import UserManager from "../managers/userManager.js";
-import { createHash } from "../utils/encrypt.js";
+import UserManager from "../domain/managers/userManager.js";
+import { createHash } from "../common/encrypt.js";
 
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_CALLBACK_URL } =
   process.env;
