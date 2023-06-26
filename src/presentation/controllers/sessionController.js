@@ -1,4 +1,3 @@
-import { z } from "zod";
 import SessionManager from "../../domain/managers/sessionManager.js";
 import UserMangaer from "../../domain/managers/userManager.js";
 import loginValidation from "../../domain/validations/session/loginValidation.js";
@@ -12,17 +11,6 @@ export const signup = async (req, res, next) => {
       status: "success",
       message: "Signup success!",
       payload: { ...result, password: undefined },
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const signupPaspport = async (req, res, next) => {
-  try {
-    return res.status(201).json({
-      status: "success",
-      message: "Signup success!",
     });
   } catch (error) {
     next(error);
@@ -51,30 +39,6 @@ export const login = async (req, res, next) => {
         accessToken,
         message: "Login success!",
       });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const loginPassport = async (req, res, next) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({
-        status: "error",
-        message: "Unauthorized",
-      });
-    }
-    const { email, role } = req.user;
-
-    req.session.user = { email, role };
-    if (role === "admin") {
-      req.session.admin = true;
-    }
-
-    return res.status(200).json({
-      status: "success",
-      message: "Login success!",
-    });
   } catch (error) {
     next(error);
   }

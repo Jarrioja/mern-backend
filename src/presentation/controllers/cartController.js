@@ -41,6 +41,7 @@ const deleteProduct = async (req, res, next) => {
       req.params.cartId,
       req.params.productId
     );
+
     return res.status(201).json({ status: "success", payload: cart });
   } catch (error) {
     next(error);
@@ -57,10 +58,10 @@ const updateCart = async (req, res, next) => {
   }
 };
 
-const updateQuantity = async (req, res, next) => {
+const updateProductQuantity = async (req, res, next) => {
   try {
     const manager = new CartManager();
-    const cart = await manager.updateQuantity(
+    const cart = await manager.updateProductQuantity(
       req.params.cartId,
       req.params.productId,
       req.body.quantity
@@ -86,6 +87,6 @@ export {
   addToCart,
   deleteProduct,
   updateCart,
-  updateQuantity,
+  updateProductQuantity,
   emptyCart,
 };

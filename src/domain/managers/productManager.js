@@ -1,28 +1,29 @@
-import ProductMongoDao from "../../data/daos/mongo/productMongoDao.js";
-
+import container from "../../container.js";
 class ProductManager {
   constructor() {
-    this.dao = new ProductMongoDao();
+    this.productRepository = container.resolve("ProductRepository");
   }
 
   async find(params) {
-    return await this.dao.find(params);
+    return await this.productRepository.find(params);
   }
 
   async findById(id) {
-    return await this.dao.findById(id);
+    const product = await this.productRepository.findById(id);
+    if (product == null) throw new Error("Product not found");
+    return product;
   }
 
   async create(product) {
-    return await this.dao.createProduct(product);
+    return await this.productRepository.createProduct(product);
   }
 
   async update(id, product) {
-    return await this.dao.updateProduct(id, product);
+    return await this.productRepository.updateProduct(id, product);
   }
 
   async delete(id) {
-    return await this.dao.deleteProduct(id);
+    return await this.productRepository.deleteProduct(id);
   }
 }
 

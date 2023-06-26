@@ -11,15 +11,12 @@ import {
 
 const roleRouter = Router();
 
-roleRouter.get("/", authenticate, authorization("getRoles"), getRoles);
-roleRouter.get("/:id", authenticate, authorization("getRole"), getRoleById);
-roleRouter.post("/", authenticate, authorization("creteRole"), createRole);
-roleRouter.put("/:id", authenticate, authorization("updateRole"), updateRole);
-roleRouter.delete(
-  "/:id",
-  authenticate,
-  authorization("deleteRole"),
-  deleteRole
-);
+roleRouter.use(authenticate);
+
+roleRouter.get("/", authorization("getRoles"), getRoles);
+roleRouter.get("/:id", authorization("getRole"), getRoleById);
+roleRouter.post("/", authorization("creteRole"), createRole);
+roleRouter.put("/:id", authorization("updateRole"), updateRole);
+roleRouter.delete("/:id", authorization("deleteRole"), deleteRole);
 
 export default roleRouter;

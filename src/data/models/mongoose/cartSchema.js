@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const cartSchema = new Schema({
+const CartSchema = new Schema({
   products: [
     {
       product: { type: Schema.Types.ObjectId, require: true, ref: "Product" },
@@ -8,8 +8,8 @@ const cartSchema = new Schema({
     },
   ],
 });
-cartSchema.pre(["find", "findOne"], function () {
-  this.populate(["products.product"]);
-});
-const Cart = model("Cart", cartSchema);
-export { Cart };
+// CartSchema.pre(["find", "findOne"], function () {
+//   this.populate(["products.product"]);
+// });
+const cartSchema = model("Cart", CartSchema);
+export { cartSchema };
