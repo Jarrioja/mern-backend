@@ -1,12 +1,12 @@
-import UserMongoDao from "../../data/daos/mongo/userMongoDao.js";
+import container from "../../container.js";
 import { createHash, isValidPassword } from "../../common/encrypt.js";
 class SessionManager {
   constructor() {
-    this.userDao = new UserMongoDao();
+    this.userRepository = new container.resolve("UserRepository");
   }
 
   async login(email, password) {
-    const user = await this.userDao.getUserByEmail(email);
+    const user = await this.userRepository.getUserByEmail(email);
     const isPasswordCorrect = await isValidPassword(password, user.password);
     if (!isPasswordCorrect) throw new Error("Password incorrect");
     return user;
@@ -18,7 +18,7 @@ class SessionManager {
       ...user,
       password: encryptedPassword,
     };
-    return await this.userDao.createUser(newUser);
+    return await this.userRepository.createUser(newUser);
   }
 }
 

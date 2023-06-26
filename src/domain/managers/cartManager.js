@@ -1,36 +1,39 @@
-import CartMongoDao from "../../data/daos/mongo/cartMongoDao.js";
-
+import container from "../../container.js";
 class CartManager {
   constructor() {
-    this.dao = new CartMongoDao();
+    this.cartRepository = container.resolve("CartRepository");
   }
 
   async findById(cartId) {
-    return await this.dao.findById(cartId);
+    return await this.cartRepository.findById(cartId);
   }
 
   async create() {
-    return await this.dao.createCart();
+    return await this.cartRepository.createCart();
   }
 
   async addProduct(cartId, productId) {
-    return await this.dao.addProduct(cartId, productId);
+    return await this.cartRepository.addProduct(cartId, productId);
   }
 
   async deleteProduct(cartId, productId) {
-    return await this.dao.deleteProduct(cartId, productId);
+    return await this.cartRepository.deleteProduct(cartId, productId);
   }
 
   async updateCart(cartId, products) {
-    return await this.dao.updateCart(cartId, products);
+    return await this.cartRepository.updateCart(cartId, products);
   }
 
-  async updateQuantity(cartId, products, quantity) {
-    return await this.dao.updateQuantity(cartId, products, quantity);
+  async updateProductQuantity(cartId, products, quantity) {
+    return await this.cartRepository.updateProductQuantity(
+      cartId,
+      products,
+      quantity
+    );
   }
 
   async emptyCart(cartId) {
-    return await this.dao.emptyCart(cartId);
+    return await this.cartRepository.emptyCart(cartId);
   }
 }
 

@@ -1,6 +1,7 @@
-import { Product } from "../../models/productModel.js";
+import { productSchema } from "../../models/mongoose/productSchema.js";
+import Product from "../../../domain/entities/product.js";
 
-export default class ProductMongoDao {
+export default class ProductMongooseRepository {
   async find({ limit, sort, category, status, page }) {
     let paginateQuery = {};
     if (category) {
@@ -18,49 +19,33 @@ export default class ProductMongoDao {
       sort: { price: sortQuery || -1 },
     };
 
-    const productDocuments = await Product.paginate(
+    const productDocuments = await productSchema.paginate(
       paginateQuery,
       paginateOptions
     );
-    productDocuments.nextLink = null;
-    productDocuments.prevLink = null;
-    if (productDocuments.hasNextPage) {
-      productDocuments.nextLink = `/api/products/?page=${
-        productDocuments.nextPage
-      }&limit=${limit}&sort=${sort}&category=${category || ""}&status${
-        status || ""
-      }`;
-    }
-    if (productDocuments.hasPrevPage) {
-      productDocuments.prevLink = `/api/products/?page=${
-        productDocuments.prevPage
-      }&limit=${limit}&sort=${sort}&category=${category || ""}&status${
-        status || ""
-      }`;
-    }
-    return {
-      products: productDocuments.docs.map((document) => ({
-        id: document._id,
-        code: document.code,
-        title: document.title,
-        description: document.description,
-        price: document.price,
-        status: document.status,
-        stock: document.stock,
-        category: document.category,
-        thumbnails: document.thumbnails,
-      })),
-      pagination: {
-        ...productDocuments,
-        docs: undefined,
-        nextLink: productDocuments.nextLink,
-        prevLink: productDocuments.prevLink,
-      },
-    };
+
+    const { docs, ...pagination } = productDocuments;
+    const products = docs.map(
+      (document) =>
+        new Product({
+          id: document._id,
+          code: document.code,
+          title: document.title,
+          description: document.description,
+          price: document.price,
+          status: document.status,
+          stock: document.stock,
+          category: document.category,
+          thumbnails: document.thumbnails,
+        })
+    );
+
+    return { products, pagination };
   }
   async findById(productId) {
-    const productDocument = await Product.findById(productId);
-    return {
+    const productDocument = await productSchema.findById(productId);
+
+    return new Product({
       id: productDocument._id,
       code: productDocument.code,
       title: productDocument.title,
@@ -70,19 +55,19 @@ export default class ProductMongoDao {
       stock: productDocument.stock,
       category: productDocument.category,
       thumbnails: productDocument.thumbnails,
-    };
+    });
   }
   async createProduct(product) {
-    const sameCode = await Product.findOne({ code: product.code });
+    const sameCode = await productSchema.findOne({ code: product.code });
     if (sameCode) {
       throw {
-        message: "El codigo del producto ya existe",
+        message: "Product code already exists",
       };
     }
-    const productDocument = new Product(product);
+    const productDocument = new productSchema(product);
     await productDocument.save();
 
-    return {
+    return new Product({
       id: productDocument._id,
       code: productDocument.code,
       title: productDocument.title,
@@ -92,20 +77,20 @@ export default class ProductMongoDao {
       stock: productDocument.stock,
       category: productDocument.category,
       thumbnails: productDocument.thumbnails,
-    };
+    });
   }
   async updateProduct(productId, product) {
     const options = { new: true };
-    const productDocument = await Product.findByIdAndUpdate(
+    const productDocument = await productSchema.findByIdAndUpdate(
       productId,
       product,
       options
     );
     if (!productDocument) {
-      throw { message: "Product Not found" };
+      throw { message: "Product not found" };
     }
 
-    return {
+    return new Product({
       id: productDocument._id,
       code: productDocument.code,
       title: productDocument.title,
@@ -115,17 +100,17 @@ export default class ProductMongoDao {
       stock: productDocument.stock,
       category: productDocument.category,
       thumbnails: productDocument.thumbnails,
-    };
+    });
   }
   async deleteProduct(productId) {
-    const productDocument = await Product.findByIdAndDelete(productId);
+    const productDocument = await productSchema.findByIdAndDelete(productId);
     if (!productDocument) {
-      throw { message: "Product Not found" };
+      throw { message: "Product not found" };
     }
-    return {
+    return new Product({
       id: productDocument._id,
       code: productDocument.code,
       title: productDocument.title,
-    };
+    });
   }
 }

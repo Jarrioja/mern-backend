@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
-const roleSchema = new Schema({
+const RoleSchema = new Schema({
   name: { type: Schema.Types.String, required: true },
   permissions: [{ type: Schema.Types.String }],
 });
-roleSchema.plugin(mongoosePaginate);
-const Role = model("Role", roleSchema);
-export { Role };
+RoleSchema.plugin(mongoosePaginate);
+const roleSchema = model("Role", RoleSchema);
+export { roleSchema };

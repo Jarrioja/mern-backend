@@ -5,7 +5,7 @@ import {
   addToCart,
   deleteProduct,
   updateCart,
-  updateQuantity,
+  updateProductQuantity,
   emptyCart,
 } from "../controllers/cartController.js";
 
@@ -16,7 +16,7 @@ cartRouter.get("/:cartId", getCartById);
 cartRouter.post("/:cartId/proudct/:productId/", addToCart);
 cartRouter.delete("/:cartId/proudct/:productId/", deleteProduct);
 cartRouter.put("/:cartId", updateCart);
-cartRouter.put("/:cartId/proudct/:productId/", updateQuantity);
+cartRouter.put("/:cartId/proudct/:productId/", updateProductQuantity);
 cartRouter.delete("/:cartId", emptyCart);
 
 export default cartRouter;
