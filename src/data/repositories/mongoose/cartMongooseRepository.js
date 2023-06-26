@@ -31,10 +31,6 @@ export default class CartMongooseRepository {
     if (!product) throw { message: "Product not found" };
 
     const productInCart = cartDocument.products.find((p) => {
-      console.log(
-        "🚀 ~ file: cartMongooseRepository.js:34 ~ CartMongooseRepository ~ productInCart ~ p:",
-        p.product
-      );
       return p.product.equals(productId);
     });
     if (productInCart) productInCart.quantity += 1;
