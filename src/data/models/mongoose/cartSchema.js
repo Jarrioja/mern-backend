@@ -12,4 +12,4 @@ const CartSchema = new Schema({
 //   this.populate(["products.product"]);
 // });
 const cartSchema = model("Cart", CartSchema);
-export { cartSchema };
+export default cartSchema;

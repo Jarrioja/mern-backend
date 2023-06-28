@@ -1,5 +1,5 @@
-import { cartSchema } from "../../models/mongoose/cartSchema.js";
-import { productSchema } from "../../models/mongoose/productSchema.js";
+import cartSchema from "../../models/mongoose/cartSchema.js";
+import productSchema from "../../models/mongoose/productSchema.js";
 import Cart from "../../../domain/entities/cart.js";
 
 export default class CartMongooseRepository {
@@ -99,6 +99,17 @@ export default class CartMongooseRepository {
     if (!cartDocument) throw { message: "Cart not found" };
     cartDocument.products = [];
     await cartDocument.save();
+    return new Cart({
+      id: cartDocument._id,
+      products: cartDocument.products,
+    });
+  }
+
+  async getCartWithProducts(cartId) {
+    const cartDocument = await cartSchema
+      .findById(cartId)
+      .populate("products.product");
+    if (!cartDocument) throw { message: "Cart not found" };
     return new Cart({
       id: cartDocument._id,
       products: cartDocument.products,

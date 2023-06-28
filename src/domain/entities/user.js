@@ -8,6 +8,7 @@ class User {
     this.password = props.password;
     this.isAdmin = props.isAdmin;
     this.role = props.role;
+    this.cart = props.cart;
   }
 }
 

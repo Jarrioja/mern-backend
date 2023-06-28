@@ -1,6 +1,6 @@
-import { userSchema } from "../../models/mongoose/userSchema.js";
-import { roleSchema } from "../../models/mongoose/roleSchema.js";
-import { cartSchema } from "../../models/mongoose/cartSchema.js";
+import userSchema from "../../models/mongoose/userSchema.js";
+import roleSchema from "../../models/mongoose/roleSchema.js";
+import cartSchema from "../../models/mongoose/cartSchema.js";
 import User from "../../../domain/entities/user.js";
 import Role from "../../../domain/entities/role.js";
 
@@ -78,10 +78,10 @@ export default class UserMongooseRepository {
         message: "User already exists",
       };
 
-    // const cartDocument = new cartSchema({
-    //   products: [],
-    // });
-    // const newCart = await cartDocument.save();
+    const cartDocument = new cartSchema({
+      products: [],
+    });
+    const newCart = await cartDocument.save();
 
     let roleDocument = await roleSchema.findOne({ name: newUser.role });
     if (roleDocument == null) {
@@ -101,7 +101,7 @@ export default class UserMongooseRepository {
       password: userDocument.password,
       isAdmin: userDocument.isAdmin,
       role: userDocument.role,
-      // cart: userDocument.cart,
+      cart: userDocument.cart,
     });
   }
 
@@ -123,21 +123,10 @@ export default class UserMongooseRepository {
       password: userDocument.password,
       isAdmin: userDocument.isAdmin,
       role: userDocument.role,
-      // cart: userDocument.cart,
+      cart: userDocument.cart,
     });
   }
   async deleteUser(userId) {
     return await userSchema.findByIdAndDelete(userId);
-
-    return new User({
-      id: userDocument._id,
-      firstName: userDocument.firstName,
-      lastName: userDocument.lastName,
-      email: userDocument.email,
-      password: userDocument.password,
-      isAdmin: userDocument.isAdmin,
-      role: userDocument.role,
-      // cart: userDocument.cart,
-    });
   }
 }

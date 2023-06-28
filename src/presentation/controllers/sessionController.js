@@ -23,7 +23,6 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
     const manager = new SessionManager();
     const result = await manager.login(email, password);
-
     const accessToken = await generateToken(result);
 
     if (result.role === "admin") {

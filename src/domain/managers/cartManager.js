@@ -8,6 +8,10 @@ class CartManager {
     return await this.cartRepository.findById(cartId);
   }
 
+  async getCartWithProducts(cartId) {
+    return await this.cartRepository.getCartWithProducts(cartId);
+  }
+
   async create() {
     return await this.cartRepository.createCart();
   }

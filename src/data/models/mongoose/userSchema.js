@@ -20,4 +20,4 @@ UserSchema.pre(["find", "findOne"], function () {
   this.populate(["cart"]);
 });
 const userSchema = model("User", UserSchema);
-export { userSchema };
+export default userSchema;

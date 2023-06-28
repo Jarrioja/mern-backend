@@ -7,7 +7,7 @@ import UserMongooseRepository from "./data/repositories/mongoose/userMongooseRep
 import RoleMongooseRepository from "./data/repositories/mongoose/roleMongooseRepository.js";
 import ProductMongooseRepository from "./data/repositories/mongoose/productMongooseRepository.js";
 import CartMongooseRepository from "./data/repositories/mongoose/cartMongooseRepository.js";
-//import OrderMongooseRepository from "./data/repositories/mongoose/OrderMongooseRepository";
+import OrderMongooseRepository from "./data/repositories/mongoose/orderMongooseRepository.js";
 
 const container = createContainer();
 
@@ -19,7 +19,9 @@ if (process.env.DB === "MongooseAdapter") {
       Lifetime.SINGLETON
     ),
     CartRepository: asClass(CartMongooseRepository).scoped(Lifetime.SINGLETON),
-    // orderRepository: asClass(OrderMongooseRepository).scoped(      Lifetime.SINGLETON    ),
+    OrderRepository: asClass(OrderMongooseRepository).scoped(
+      Lifetime.SINGLETON
+    ),
   });
 } else if (process.env.DB === "file") {
 }

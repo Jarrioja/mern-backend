@@ -24,7 +24,7 @@ const ProductSchema = new Schema({
     default: true,
   },
   stock: {
-    type: String,
+    type: Number,
     require: true,
   },
   category: {
@@ -37,4 +37,4 @@ const ProductSchema = new Schema({
 });
 ProductSchema.plugin(mongoosePaginate);
 const productSchema = model("Product", ProductSchema);
-export { productSchema };
+export default productSchema;

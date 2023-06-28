@@ -1,4 +1,4 @@
-import { roleSchema } from "../../models/mongoose/roleSchema.js";
+import roleSchema from "../../models/mongoose/roleSchema.js";
 import Role from "../../../domain/entities/role.js";
 
 export default class RoleMongooseRepository {

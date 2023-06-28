@@ -7,4 +7,4 @@ const RoleSchema = new Schema({
 });
 RoleSchema.plugin(mongoosePaginate);
 const roleSchema = model("Role", RoleSchema);
-export { roleSchema };
+export default roleSchema;

@@ -1,4 +1,4 @@
-import { productSchema } from "../../models/mongoose/productSchema.js";
+import productSchema from "../../models/mongoose/productSchema.js";
 import Product from "../../../domain/entities/product.js";
 
 export default class ProductMongooseRepository {

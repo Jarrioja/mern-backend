@@ -1,16 +1,18 @@
 import CartManager from "../../domain/managers/cartManager.js";
+import OrderManager from "../../domain/managers/orderManager.js";
+import { decodeToken } from "../../common/jwt.js";
 
-const getCartById = async (req, res, next) => {
+export const getCartById = async (req, res, next) => {
   try {
     const manager = new CartManager();
-    const cart = await manager.findById(req.params.cartId);
+    const cart = await manager.getCartWithProducts(req.params.cartId);
     return res.status(201).json({ status: "success", payload: cart });
   } catch (error) {
     next(error);
   }
 };
 
-const createCart = async (req, res, next) => {
+export const createCart = async (req, res, next) => {
   try {
     const manager = new CartManager();
     const cart = await manager.create();
@@ -20,7 +22,7 @@ const createCart = async (req, res, next) => {
   }
 };
 
-const addToCart = async (req, res, next) => {
+export const addToCart = async (req, res, next) => {
   try {
     const manager = new CartManager();
     // Buscar el carrito
@@ -34,7 +36,7 @@ const addToCart = async (req, res, next) => {
   }
 };
 
-const deleteProduct = async (req, res, next) => {
+export const deleteProduct = async (req, res, next) => {
   try {
     const manager = new CartManager();
     const cart = await manager.deleteProduct(
@@ -48,7 +50,7 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
-const updateCart = async (req, res, next) => {
+export const updateCart = async (req, res, next) => {
   try {
     const manager = new CartManager();
     const cart = await manager.updateCart(req.params.cartId, req.body.products);
@@ -58,7 +60,7 @@ const updateCart = async (req, res, next) => {
   }
 };
 
-const updateProductQuantity = async (req, res, next) => {
+export const updateProductQuantity = async (req, res, next) => {
   try {
     const manager = new CartManager();
     const cart = await manager.updateProductQuantity(
@@ -71,7 +73,7 @@ const updateProductQuantity = async (req, res, next) => {
     next(error);
   }
 };
-const emptyCart = async (req, res, next) => {
+export const emptyCart = async (req, res, next) => {
   try {
     const manager = new CartManager();
     const cart = await manager.emptyCart(req.params.cartId);
@@ -81,12 +83,27 @@ const emptyCart = async (req, res, next) => {
   }
 };
 
-export {
-  createCart,
-  getCartById,
-  addToCart,
-  deleteProduct,
-  updateCart,
-  updateProductQuantity,
-  emptyCart,
+export const createOrder = async (req, res, next) => {
+  try {
+    const accessToken = req.cookies.accessToken;
+    if (!accessToken) {
+      return res.status(401).send({ status: "error", message: "Unauthorized" });
+    }
+    const decodedToken = await decodeToken(accessToken);
+    const userData = decodedToken.user;
+
+    const cartManager = new CartManager();
+    const cart = await cartManager.getCartWithProducts(req.params.cartId);
+
+    if (userData.cart._id !== req.params.cartId) {
+      return res
+        .status(401)
+        .send({ status: "error", message: "Unauthorized, not your cart" });
+    }
+    const oderManager = new OrderManager();
+    const order = await oderManager.createOrder(userData, cart);
+    return res.status(201).json({ status: "success", payload: order });
+  } catch (err) {
+    next(err);
+  }
 };
