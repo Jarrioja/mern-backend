@@ -9,6 +9,7 @@ import roleRouter from "../routes/roleRoute.js";
 
 import logger from "../middlewares/logger.js";
 import errorHandler from "../middlewares/errorHandler.js";
+import compression from "express-compression";
 
 class AppExpress {
   init() {
@@ -16,6 +17,14 @@ class AppExpress {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(
+      compression({
+        brotli: {
+          enabled: true,
+          zlib: {},
+        },
+      })
+    );
   }
   build() {
     this.app.use(logger);
@@ -26,6 +35,14 @@ class AppExpress {
     this.app.use("/api/carts", cartRouter);
     this.app.use(errorHandler);
   }
+  callback() {
+    return this.app;
+  }
+
+  close() {
+    this.server.close();
+  }
+
   listen() {
     return this.app.listen(process.env.PORT, () => {
       console.log(`Server listening on port ${process.env.PORT}`);

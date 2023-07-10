@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import chai from "chai";
 
-import DbFactory from "../data/factories/dbFactory.js";
+import DbFactory from "../../data/factories/dbFactory.js";
 
-import RoleMongooseRepository from "../data/repositories/mongoose/roleMongooseRepository.js";
+import RoleMongooseRepository from "../../data/repositories/mongoose/roleMongooseRepository.js";
 
 const expect = chai.expect;
 
@@ -14,6 +14,10 @@ db.init(process.env.DB_URI);
 describe("Testing Role Mongoose Repository", function () {
   before(function () {
     this.roleRepository = new RoleMongooseRepository();
+  });
+  beforeEach(async function () {
+    this.timeout(2000);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
   });
 
   it("El repositorio debe poder obtener todos los roles", function () {

@@ -7,6 +7,7 @@ class SessionManager {
 
   async login(email, password) {
     const user = await this.userRepository.getUserByEmail(email);
+
     const isPasswordCorrect = await isValidPassword(password, user.password);
     if (!isPasswordCorrect) throw new Error("Password incorrect");
     return user;

@@ -3,8 +3,8 @@ dotenv.config();
 import chai from "chai";
 import { faker } from "@faker-js/faker";
 
-import DbFactory from "../data/factories/dbFactory.js";
-import UserMongooseRepository from "../data/repositories/mongoose/userMongooseRepository.js";
+import DbFactory from "../../data/factories/dbFactory.js";
+import UserMongooseRepository from "../../data/repositories/mongoose/userMongooseRepository.js";
 
 const expect = chai.expect;
 
@@ -14,6 +14,10 @@ db.init(process.env.DB_URI);
 describe("Testing User Mongoose Repository", () => {
   before(async function () {
     this.userRepository = new UserMongooseRepository();
+  });
+  beforeEach(async function () {
+    this.timeout(2000);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
   });
 
   it("El repositorio debe ser una instancia de UserMongooseRepository", function () {

@@ -7,9 +7,18 @@ class MongooseAdapter {
       useUnifiedTopology: true,
     });
   }
-
   async close() {
     await this.connection.disconnect();
+  }
+
+  async clear() {
+    const collections = await mongoose.connection.db.collections();
+
+    for (const collectionName in collections) {
+      const collection = collections[collectionName];
+      await collection.deleteMany({});
+      console.log(`Colección ${collectionName} eliminada.`);
+    }
   }
 }
 

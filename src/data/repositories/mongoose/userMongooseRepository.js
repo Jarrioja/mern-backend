@@ -61,14 +61,14 @@ export default class UserMongooseRepository {
   async getUserByEmail(email) {
     const userDocument = await userSchema.findOne({ email });
     return new User({
-      id: userDocument._id,
-      firstName: userDocument.firstName,
-      lastName: userDocument.lastName,
-      email: userDocument.email,
-      password: userDocument.password,
-      isAdmin: userDocument.isAdmin,
-      role: userDocument.role,
-      cart: userDocument.cart,
+      id: userDocument?._id,
+      firstName: userDocument?.firstName,
+      lastName: userDocument?.lastName,
+      email: userDocument?.email,
+      password: userDocument?.password,
+      isAdmin: userDocument?.isAdmin,
+      role: userDocument?.role,
+      cart: userDocument?.cart,
     });
   }
   async createUser(newUser) {

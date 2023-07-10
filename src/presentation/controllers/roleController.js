@@ -1,4 +1,3 @@
-import { validationResult } from "express-validator";
 import RoleManager from "../../domain/managers/roleManager.js";
 
 const getRoles = async (req, res, next) => {
