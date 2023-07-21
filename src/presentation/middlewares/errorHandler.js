@@ -11,6 +11,9 @@ const errorHandler = (err, req, res, next) => {
   } else if (err?.message?.includes("invalid password")) {
     console.log(err.stack);
     return res.status(400).json({ message: err.message });
+  } else if (err?.message?.includes("invalid password")) {
+    console.log(err.stack);
+    return res.status(400).json({ message: err.message });
   } else if (err?.message?.includes("Order fail")) {
     console.log(err.stack);
     return res
@@ -20,7 +23,7 @@ const errorHandler = (err, req, res, next) => {
 
   console.log(err.message);
   console.log(err.stack);
-  return res.status(500).json({ message: "an error occurs" });
+  return res.status(500).json({ message: err.message });
 };
 
 export default errorHandler;

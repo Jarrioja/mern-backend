@@ -107,10 +107,15 @@ export default class UserMongooseRepository {
 
   async updateUser(userId, user) {
     const emailExists = await userSchema.findOne({ email: user.email });
+    const samePassowrd = await userSchema.findOne({
+      _id: userId,
+      password: user.password,
+    });
+
     if (emailExists)
-      throw {
+      throw new Error({
         message: "Email already exists",
-      };
+      });
     const userDocument = await userSchema.findByIdAndUpdate(userId, user, {
       new: true,
     });

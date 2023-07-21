@@ -1,6 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-
+import cors from "cors";
 import productRouter from "../routes/productsRoute.js";
 import cartRouter from "../routes/cartsRoute.js";
 import userRouter from "../routes/usersRoute.js";
@@ -17,6 +17,8 @@ class AppExpress {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(cors());
+
     this.app.use(
       compression({
         brotli: {

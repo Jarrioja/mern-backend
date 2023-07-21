@@ -58,11 +58,11 @@ export const logout = async (req, res, next) => {
   }
 };
 
-export const failed = (req, res) => {
+export const failed = (req, res, next) => {
   return res.status(500).send({ error: "failed" });
 };
 
-export const current = async (req, res) => {
+export const current = async (req, res, next) => {
   try {
     const accessToken = req.cookies.accessToken;
     if (!accessToken) {
@@ -76,6 +76,40 @@ export const current = async (req, res) => {
       return res.status(401).send({ status: "error", message: "Unauthorized" });
     }
     return res.status(200).send({ status: "success", payload: req.user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const manager = new SessionManager();
+    await manager.forgotPassword(email);
+
+    return res.status(200).json({
+      status: "success",
+      message:
+        "Mail sent successfully. Please check your email to reset your password",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const passwords = req.body;
+    const token = req.query.token;
+
+    const manager = new SessionManager();
+    const result = await manager.changePassword(token, passwords);
+    if (!result) throw new Error("Error sending mail");
+
+    return res.status(200).json({
+      status: "success",
+      message: "Password changed successfully",
+    });
   } catch (error) {
     next(error);
   }
