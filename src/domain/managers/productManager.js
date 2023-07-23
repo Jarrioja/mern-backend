@@ -1,4 +1,4 @@
-import container from "../../container.js";
+import container from "../../container.ts";
 class ProductManager {
   constructor() {
     this.productRepository = container.resolve("ProductRepository");

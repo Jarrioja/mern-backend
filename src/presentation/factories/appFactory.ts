@@ -1,4 +1,4 @@
-import AppExpress from "../application/appExpress.js";
+import AppExpress from "../application/appExpress";
 
 class AppFactory {
   static create(appType = "AppExpress") {

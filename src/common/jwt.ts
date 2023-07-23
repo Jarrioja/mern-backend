@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const generateToken = async (user) => {
+export const generateToken = async (user: object) => {
   return await jwt.sign(
     {
       user: {
@@ -10,13 +10,13 @@ export const generateToken = async (user) => {
         password: undefined,
       },
     },
-    process.env.JWT_SECRET,
+    process.env.JWT_SECRET as string,
     {
       expiresIn: "1h",
     }
   );
 };
 
-export const decodeToken = async (token) => {
-  return await jwt.verify(token, process.env.JWT_SECRET);
+export const decodeToken = async (token: string) => {
+  return await jwt.verify(token, process.env.JWT_SECRET as string);
 };

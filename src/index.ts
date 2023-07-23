@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import AppFactory from "./presentation/factories/appFactory.js";
+import AppFactory from "./presentation/factories/appFactory";
 import DbFactory from "./data/factories/dbFactory.js";
 
 void (async () => {

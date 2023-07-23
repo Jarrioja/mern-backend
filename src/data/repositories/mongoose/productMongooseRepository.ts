@@ -1,5 +1,6 @@
-import productSchema from "../../models/mongoose/productSchema.js";
-import Product from "../../../domain/entities/product.js";
+import productSchema from "../../models/mongoose/productSchema";
+import Product from "../../../domain/entities/product";
+import { ProductProps } from "../../../interfaces/products";
 
 export default class ProductMongooseRepository {
   async find({ limit, sort, category, status, page }) {
@@ -26,18 +27,18 @@ export default class ProductMongooseRepository {
 
     const { docs, ...pagination } = productDocuments;
     const products = docs.map(
-      (document) =>
-        new Product({
-          id: document._id,
-          code: document.code,
-          title: document.title,
-          description: document.description,
-          price: document.price,
-          status: document.status,
-          stock: document.stock,
-          category: document.category,
-          thumbnails: document.thumbnails,
-        })
+      (document: ProductProps) =>
+        new Product(
+          document._id,
+          document.code,
+          document.title,
+          document.description,
+          document.price,
+          document.status,
+          document.stock,
+          document.category,
+          document.thumbnails
+        )
     );
 
     return { products, pagination };

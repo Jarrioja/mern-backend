@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { createContainer, asClass, Lifetime } from "awilix";
+import { createContainer, asClass } from "awilix";
 
 import UserMongooseRepository from "./data/repositories/mongoose/userMongooseRepository.js";
 import RoleMongooseRepository from "./data/repositories/mongoose/roleMongooseRepository.js";
@@ -13,15 +13,11 @@ const container = createContainer();
 
 if (process.env.DB === "MongooseAdapter") {
   container.register({
-    UserRepository: asClass(UserMongooseRepository).scoped(Lifetime.SINGLETON),
-    RoleRepository: asClass(RoleMongooseRepository).scoped(Lifetime.SINGLETON),
-    ProductRepository: asClass(ProductMongooseRepository).scoped(
-      Lifetime.SINGLETON
-    ),
-    CartRepository: asClass(CartMongooseRepository).scoped(Lifetime.SINGLETON),
-    OrderRepository: asClass(OrderMongooseRepository).scoped(
-      Lifetime.SINGLETON
-    ),
+    UserRepository: asClass(UserMongooseRepository).singleton(),
+    RoleRepository: asClass(RoleMongooseRepository).singleton(),
+    ProductRepository: asClass(ProductMongooseRepository).singleton(),
+    CartRepository: asClass(CartMongooseRepository).singleton(),
+    OrderRepository: asClass(OrderMongooseRepository).singleton(),
   });
 } else if (process.env.DB === "file") {
 }

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Express } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import productRouter from "../routes/productsRoute.js";
@@ -9,11 +9,11 @@ import roleRouter from "../routes/roleRoute.js";
 
 import logger from "../middlewares/logger.js";
 import errorHandler from "../middlewares/errorHandler.js";
-import compression from "express-compression";
+import compression from "compression";
 
 class AppExpress {
+  private app: Express = express();
   init() {
-    this.app = express();
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
@@ -42,7 +42,7 @@ class AppExpress {
   }
 
   close() {
-    this.server.close();
+    this.close();
   }
 
   listen() {
