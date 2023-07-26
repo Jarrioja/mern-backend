@@ -26,10 +26,6 @@ class SessionManager {
 
   async forgotPassword(email) {
     const user = await this.userRepository.getUserByEmail(email);
-    console.log(
-      "🚀 ~ file: sessionManager.js:29 ~ SessionManager ~ forgotPassword ~ user:",
-      user
-    );
 
     if (!user.email) throw new Error("User not found");
     const token = await generateToken(user);
@@ -57,23 +53,7 @@ class SessionManager {
     if (passwords.password !== passwords.passwordToConfirm) {
       throw new Error("The passwords do not match");
     }
-    console.log(
-      "🚀 ~ file: sessionManager.js:58 ~ SessionManager ~ changePassword ~ passwords.passwordToConfirm:",
-      passwords.passwordToConfirm
-    );
-    const isSamePassword = await isValidPassword(passwords.password, password);
-    console.log(
-      "🚀 ~ file: sessionManager.js:61 ~ SessionManager ~ changePassword ~ isSamePassword:",
-      isSamePassword
-    );
-    console.log(
-      "🚀 ~ file: sessionManager.js:61 ~ SessionManager ~ changePassword ~ password:",
-      password
-    );
-    console.log(
-      "🚀 ~ file: sessionManager.js:61 ~ SessionManager ~ changePassword ~ passwords.password:",
-      passwords.password
-    );
+
     if (isSamePassword)
       throw new Error("The new password is the same as the old one");
 

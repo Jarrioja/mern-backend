@@ -1,6 +1,11 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
+import compression from "express-compression";
+
+import { swaggerOptions } from "../../config/swagger.config.js";
 import productRouter from "../routes/productsRoute.js";
 import cartRouter from "../routes/cartsRoute.js";
 import userRouter from "../routes/usersRoute.js";
@@ -9,7 +14,6 @@ import roleRouter from "../routes/roleRoute.js";
 
 import logger from "../middlewares/logger.js";
 import errorHandler from "../middlewares/errorHandler.js";
-import compression from "express-compression";
 
 class AppExpress {
   init() {
@@ -29,6 +33,12 @@ class AppExpress {
     );
   }
   build() {
+    const swaggerDocs = swaggerJsdoc(swaggerOptions);
+    this.app.use(
+      "/api-docs",
+      swaggerUiExpress.serve,
+      swaggerUiExpress.setup(swaggerDocs)
+    );
     this.app.use(logger);
     this.app.use("/api/sessions", sessionRouter);
     this.app.use("/api/users", userRouter);
