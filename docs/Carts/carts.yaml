@@ -1,0 +1,197 @@
+paths:
+  /api/carts:
+    get: # Crear carrito
+      tags:
+        - Carts
+      summary: Create a Cart
+      responses:
+          "200":
+            description: Respuesta exitosa.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Cart'
+
+  /api/carts/{cartId}:
+    get: # Obtener Productos del carrito
+      tags:
+        - Carts
+      summary: Get a Cart
+      parameters:
+        - in: path
+          required: true
+          name: cartId
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Respuesta exitosa.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Cart'
+    put: # Actualizar carrito
+      tags:
+        - Carts
+      summary: Update a Cart
+      parameters:
+        - in: path
+          required: true
+          name: cartId
+          schema:
+            type: string
+      requestBody:
+        description: Actualizar producto
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+          "200":
+            description: Respuesta exitosa.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Cart'
+    delete: # Vaciar Carrito
+      tags:
+        - Carts
+      summary: Delete a Cart
+      parameters:
+        - in: path
+          required: true
+          name: cartId
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Respuesta exitosa.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Cart'
+
+  /api/carts/{cartId}/product{productId}:
+    post: # Añadir producto al carrito
+      tags:
+        - Carts
+      summary: Add a protducto to the cart
+      parameters:
+        - in: path
+          required: true
+          name: cartId
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: productId
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Product Added
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Cart'
+      
+    put: # Actuaizar cantidad de Producto en Carrito
+      tags:
+        - Carts
+      summary: Update a Product quantity in a Cart
+      parameters:
+        - in: path
+          required: true
+          name: cartId
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: productId
+          schema:
+            type: string
+      requestBody:
+        description: Actualizar producto
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCart'
+      responses:
+          "200":
+            description: Respuesta exitosa.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Cart'
+    delete: # Eliminar un producto
+      tags:
+        - Carts
+      summary: Delete a Product in a Cart
+      parameters:
+        - in: path
+          required: true
+          name: cartId
+          schema:
+            type: string
+        - in: path
+          required: true
+          name: productId
+          schema:
+            type: string
+      responses:
+          "200":
+            description: Producto eliminado.
+
+  /api/carts/{cartId}/purchase: 
+    post: # Crear Orden
+      tags:
+        - Carts
+      summary: Order created
+      parameters:
+        - in: path
+          required: true
+          name: cartId
+          schema:
+            type: string
+      requestBody:
+        description: Order created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+          "200":
+            description: Orden Creada.
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        id: 
+          type: string
+        product:
+          type: array
+          items:
+            type: string
+      example:
+        status: success
+        payload:
+          id: 64c3024efeecca944da3e288
+          products: []
+    UpdateCart:
+      type: object
+      properties:
+        quantity:
+          type: number
+      example:
+        quantity: 300
+  requestBodies:
+    updateCart:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCart'
