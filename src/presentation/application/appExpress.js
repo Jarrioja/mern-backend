@@ -35,7 +35,7 @@ class AppExpress {
   build() {
     const swaggerDocs = swaggerJsdoc(swaggerOptions);
     this.app.use(
-      "/api-docs",
+      "/docs",
       swaggerUiExpress.serve,
       swaggerUiExpress.setup(swaggerDocs)
     );
