@@ -1,0 +1,14 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "modules": true
+  }
+  },
+  "extends": ["prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    // Tus reglas específicas aquí
+  }
+}

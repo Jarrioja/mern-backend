@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 import {
   getUsers,
@@ -6,18 +6,18 @@ import {
   createUser,
   updateUser,
   deleteUser,
-} from "../controllers/userController.js";
-import authenticate from "../middlewares/authenticate.js";
-import authorization from "../middlewares/authtorization.js";
+} from '../controllers/userController.js';
+import authenticate from '../middlewares/authenticate.js';
+import authorization from '../middlewares/authtorization.js';
 
 const userRouter = Router();
 
 userRouter.use(authenticate);
 
-userRouter.get("/", authorization("getUsers"), getUsers);
-userRouter.get("/:id", authorization("getUser"), getUserById);
-userRouter.post("/", authorization("saveUser"), createUser);
-userRouter.put("/:id", authorization("updateUser"), updateUser);
-userRouter.delete("/:id", authorization("deleteUser"), deleteUser);
+userRouter.get('/', authorization('getUsers'), getUsers);
+userRouter.get('/:id', authorization('getUser'), getUserById);
+userRouter.post('/', authorization('saveUser'), createUser);
+userRouter.put('/:id', authorization('updateUser'), updateUser);
+userRouter.delete('/:id', authorization('deleteUser'), deleteUser);
 
 export default userRouter;

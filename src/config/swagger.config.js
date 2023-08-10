@@ -1,12 +1,12 @@
 export const swaggerOptions = {
   definition: {
-    openapi: "3.0.1",
+    openapi: '3.0.1',
     info: {
-      title: "Documentacion Coder",
-      description: "Documentacion de la API",
+      title: 'Documentacion Coder',
+      description: 'Documentacion de la API',
       contact: {
-        name: "Jesus Arrioja",
-        email: "hello@jesusarrioja.dev",
+        name: 'Jesus Arrioja',
+        email: 'hello@jesusarrioja.dev',
       },
     },
   },

@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
+import { Schema, model } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const UserSchema = new Schema({
   firstName: { type: String, required: true },
@@ -8,16 +8,16 @@ const UserSchema = new Schema({
   password: { type: String },
   age: { type: Number, default: 18 },
   isAdmin: { type: Boolean, default: false },
-  role: { type: Schema.Types.ObjectId, index: true, ref: "Role" },
-  cart: { type: Schema.Types.ObjectId, ref: "Cart" },
+  role: { type: Schema.Types.ObjectId, index: true, ref: 'Role' },
+  cart: { type: Schema.Types.ObjectId, ref: 'Cart' },
 });
 UserSchema.plugin(mongoosePaginate);
 
-UserSchema.pre(["find", "findOne"], function () {
-  this.populate(["role"]);
+UserSchema.pre(['find', 'findOne'], function () {
+  this.populate(['role']);
 });
-UserSchema.pre(["find", "findOne"], function () {
-  this.populate(["cart"]);
+UserSchema.pre(['find', 'findOne'], function () {
+  this.populate(['cart']);
 });
-const userSchema = model("User", UserSchema);
+const userSchema = model('User', UserSchema);
 export default userSchema;

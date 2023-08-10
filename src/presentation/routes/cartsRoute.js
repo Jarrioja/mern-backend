@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   createCart,
   getCartById,
@@ -8,18 +8,18 @@ import {
   updateProductQuantity,
   emptyCart,
   createOrder,
-} from "../controllers/cartController.js";
-import authenticate from "../../presentation/middlewares/authenticate.js";
+} from '../controllers/cartController.js';
+import authenticate from '../../presentation/middlewares/authenticate.js';
 
 const cartRouter = Router();
 
-cartRouter.get("/", createCart);
-cartRouter.get("/:cartId", getCartById);
-cartRouter.post("/:cartId/proudct/:productId/", authenticate, addToCart);
-cartRouter.post("/:cartId/purchase", authenticate, createOrder);
-cartRouter.delete("/:cartId/proudct/:productId/", deleteProduct);
-cartRouter.put("/:cartId", updateCart);
-cartRouter.put("/:cartId/proudct/:productId/", updateProductQuantity);
-cartRouter.delete("/:cartId", emptyCart);
+cartRouter.get('/', createCart);
+cartRouter.get('/:cartId', getCartById);
+cartRouter.post('/:cartId/proudct/:productId/', authenticate, addToCart);
+cartRouter.post('/:cartId/purchase', authenticate, createOrder);
+cartRouter.delete('/:cartId/proudct/:productId/', deleteProduct);
+cartRouter.put('/:cartId', updateCart);
+cartRouter.put('/:cartId/proudct/:productId/', updateProductQuantity);
+cartRouter.delete('/:cartId', emptyCart);
 
 export default cartRouter;

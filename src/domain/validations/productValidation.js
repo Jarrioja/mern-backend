@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 export const createProductValidation = z.object({
   productId: z.string().max(24),
   title: z.string().nonempty().trim(),

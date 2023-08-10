@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 const userCreateValidation = z.object({
   email: z.string().email(),
   firstName: z.string().min(3).max(35),

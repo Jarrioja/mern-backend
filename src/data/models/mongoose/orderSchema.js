@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
+import { Schema, model } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const OrderSchema = new Schema({
   purchaser: { type: String, required: true },
@@ -9,5 +9,5 @@ const OrderSchema = new Schema({
 });
 
 OrderSchema.plugin(mongoosePaginate);
-const orderSchema = model("Order", OrderSchema);
+const orderSchema = model('Order', OrderSchema);
 export default orderSchema;
