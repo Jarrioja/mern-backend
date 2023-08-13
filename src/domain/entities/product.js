@@ -9,5 +9,6 @@ export default class Product {
     this.stock = props.stock;
     this.category = props.category;
     this.thumbnails = props.thumbnails;
+    this.owner = props.owner;
   }
 }

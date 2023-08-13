@@ -6,6 +6,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  setPremiumUser,
 } from '../controllers/userController.js';
 import authenticate from '../middlewares/authenticate.js';
 import authorization from '../middlewares/authtorization.js';
@@ -18,6 +19,7 @@ userRouter.get('/', authorization('getUsers'), getUsers);
 userRouter.get('/:id', authorization('getUser'), getUserById);
 userRouter.post('/', authorization('saveUser'), createUser);
 userRouter.put('/:id', authorization('updateUser'), updateUser);
+userRouter.put('/premium/:id', authorization('updateUser'), setPremiumUser);
 userRouter.delete('/:id', authorization('deleteUser'), deleteUser);
 
 export default userRouter;

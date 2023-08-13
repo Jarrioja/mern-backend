@@ -34,7 +34,12 @@ const ProductSchema = new Schema({
   thumbnails: {
     type: Array,
   },
+  owner: {
+    type: String,
+    default: 'admin',
+  },
 });
 ProductSchema.plugin(mongoosePaginate);
+
 const productSchema = model('Product', ProductSchema);
 export default productSchema;
