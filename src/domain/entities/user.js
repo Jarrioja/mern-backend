@@ -9,6 +9,8 @@ class User {
     this.isAdmin = props.isAdmin;
     this.role = props.role;
     this.cart = props.cart;
+    this.documents = props.documents;
+    this.lastConnection = props.lastConnection;
   }
 }
 

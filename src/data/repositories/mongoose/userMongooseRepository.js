@@ -29,7 +29,9 @@ export default class UserMongooseRepository {
           email: document.email,
           isAdmin: document.isAdmin,
           role: document.role,
-          cart: document.cart, //Agregar carrito
+          cart: document.cart,
+          documents: document.documents,
+          lastConnection: document.lastConnection,
         }),
     );
     return {
@@ -53,6 +55,8 @@ export default class UserMongooseRepository {
       isAdmin: userDocument.isAdmin,
       role: userDocument.role,
       cart: userDocument.cart,
+      documents: userDocument.documents,
+      lastConnection: userDocument.lastConnection,
     });
   }
   async getUserByEmail(email) {
@@ -66,6 +70,8 @@ export default class UserMongooseRepository {
       isAdmin: userDocument?.isAdmin,
       role: userDocument?.role,
       cart: userDocument?.cart,
+      documents: userDocument.documents,
+      lastConnection: userDocument.lastConnection,
     });
   }
   async createUser(newUser) {
@@ -99,6 +105,8 @@ export default class UserMongooseRepository {
       isAdmin: userDocument.isAdmin,
       role: userDocument.role,
       cart: userDocument.cart,
+      documents: userDocument.documents,
+      lastConnection: userDocument.lastConnection,
     });
   }
 
@@ -127,6 +135,8 @@ export default class UserMongooseRepository {
       isAdmin: userDocument.isAdmin,
       role: userDocument.role,
       cart: userDocument.cart,
+      documents: userDocument.documents,
+      lastConnection: userDocument.lastConnection,
     });
   }
 

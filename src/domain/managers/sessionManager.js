@@ -12,7 +12,11 @@ class SessionManager {
     if (!user.email) throw new Error('User not found');
     const isPasswordCorrect = await isValidPassword(password, user.password);
     if (!isPasswordCorrect) throw new Error('Password incorrect');
+    await this.userRepository.updateUser(user.id, { lastConnection: new Date() });
     return user;
+  }
+  async logout(userId) {
+    await this.userRepository.updateUser(userId, { lastConnection: null });
   }
 
   async signup(user) {
