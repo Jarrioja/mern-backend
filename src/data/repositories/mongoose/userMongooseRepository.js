@@ -1,8 +1,8 @@
-import userSchema from "../../models/mongoose/userSchema.js";
-import roleSchema from "../../models/mongoose/roleSchema.js";
-import cartSchema from "../../models/mongoose/cartSchema.js";
-import User from "../../../domain/entities/user.js";
-import Role from "../../../domain/entities/role.js";
+import userSchema from '../../models/mongoose/userSchema.js';
+import roleSchema from '../../models/mongoose/roleSchema.js';
+import cartSchema from '../../models/mongoose/cartSchema.js';
+import User from '../../../domain/entities/user.js';
+import Role from '../../../domain/entities/role.js';
 
 export default class UserMongooseRepository {
   async getUsers({ limit, sort, role, page }) {
@@ -11,16 +11,13 @@ export default class UserMongooseRepository {
       paginateQuery = { role: role };
     }
     let sortQuery;
-    sort === "asc" ? (sortQuery = 1) : sort === "desc" ? (sortQuery = -1) : {};
+    sort === 'asc' ? (sortQuery = 1) : sort === 'desc' ? (sortQuery = -1) : {};
     const paginateOptions = {
       page: page || 1,
       limit: limit || 10,
       sort: { email: sortQuery || -1 },
     };
-    const userDocuments = await userSchema.paginate(
-      paginateQuery,
-      paginateOptions
-    );
+    const userDocuments = await userSchema.paginate(paginateQuery, paginateOptions);
 
     const { docs, ...pagination } = userDocuments;
     const users = docs.map(
@@ -33,7 +30,7 @@ export default class UserMongooseRepository {
           isAdmin: document.isAdmin,
           role: document.role,
           cart: document.cart, //Agregar carrito
-        })
+        }),
     );
     return {
       users,
@@ -46,7 +43,7 @@ export default class UserMongooseRepository {
 
     if (!userDocument)
       throw {
-        message: "User not found",
+        message: 'User not found',
       };
     return new User({
       id: userDocument._id,
@@ -75,7 +72,7 @@ export default class UserMongooseRepository {
     const userExists = await userSchema.findOne({ email: newUser.email });
     if (userExists)
       throw {
-        message: "User already exists",
+        message: 'User already exists',
       };
 
     const cartDocument = new cartSchema({
@@ -85,7 +82,7 @@ export default class UserMongooseRepository {
 
     let roleDocument = await roleSchema.findOne({ name: newUser.role });
     if (roleDocument == null) {
-      roleDocument = await roleSchema.findOne({ name: "client" });
+      roleDocument = await roleSchema.findOne({ name: 'client' });
     }
 
     const userDocument = await userSchema.create({
@@ -106,16 +103,18 @@ export default class UserMongooseRepository {
   }
 
   async updateUser(userId, user) {
-    const emailExists = await userSchema.findOne({ email: user.email });
+    if (user.email) {
+      const emailExists = await userSchema.findOne({ email: user.email });
+      if (emailExists)
+        throw new Error({
+          message: 'Email already exists',
+        });
+    }
     const samePassowrd = await userSchema.findOne({
       _id: userId,
       password: user.password,
     });
 
-    if (emailExists)
-      throw new Error({
-        message: "Email already exists",
-      });
     const userDocument = await userSchema.findByIdAndUpdate(userId, user, {
       new: true,
     });
@@ -125,12 +124,12 @@ export default class UserMongooseRepository {
       firstName: userDocument.firstName,
       lastName: userDocument.lastName,
       email: userDocument.email,
-      password: userDocument.password,
       isAdmin: userDocument.isAdmin,
       role: userDocument.role,
       cart: userDocument.cart,
     });
   }
+
   async deleteUser(userId) {
     return await userSchema.findByIdAndDelete(userId);
   }

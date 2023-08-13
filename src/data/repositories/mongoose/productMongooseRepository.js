@@ -1,5 +1,5 @@
-import productSchema from "../../models/mongoose/productSchema.js";
-import Product from "../../../domain/entities/product.js";
+import productSchema from '../../models/mongoose/productSchema.js';
+import Product from '../../../domain/entities/product.js';
 
 export default class ProductMongooseRepository {
   async find({ limit, sort, category, status, page }) {
@@ -11,7 +11,7 @@ export default class ProductMongooseRepository {
       paginateQuery = { ...paginateQuery, status: status };
     }
     let sortQuery;
-    sort === "asc" ? (sortQuery = 1) : sort === "desc" ? (sortQuery = -1) : {};
+    sort === 'asc' ? (sortQuery = 1) : sort === 'desc' ? (sortQuery = -1) : {};
 
     const paginateOptions = {
       page: page || 1,
@@ -19,10 +19,7 @@ export default class ProductMongooseRepository {
       sort: { price: sortQuery || -1 },
     };
 
-    const productDocuments = await productSchema.paginate(
-      paginateQuery,
-      paginateOptions
-    );
+    const productDocuments = await productSchema.paginate(paginateQuery, paginateOptions);
 
     const { docs, ...pagination } = productDocuments;
     const products = docs.map(
@@ -37,7 +34,8 @@ export default class ProductMongooseRepository {
           stock: document.stock,
           category: document.category,
           thumbnails: document.thumbnails,
-        })
+          owner: document.owner,
+        }),
     );
 
     return { products, pagination };
@@ -55,13 +53,14 @@ export default class ProductMongooseRepository {
       stock: productDocument.stock,
       category: productDocument.category,
       thumbnails: productDocument.thumbnails,
+      owner: productDocument.owner,
     });
   }
   async createProduct(product) {
     const sameCode = await productSchema.findOne({ code: product.code });
     if (sameCode) {
       throw {
-        message: "Product code already exists",
+        message: 'Product code already exists',
       };
     }
     const productDocument = new productSchema(product);
@@ -77,18 +76,12 @@ export default class ProductMongooseRepository {
       stock: productDocument.stock,
       category: productDocument.category,
       thumbnails: productDocument.thumbnails,
+      owner: productDocument.owner,
     });
   }
   async updateProduct(productId, product) {
     const options = { new: true };
-    const productDocument = await productSchema.findByIdAndUpdate(
-      productId,
-      product,
-      options
-    );
-    if (!productDocument) {
-      throw { message: "Product not found" };
-    }
+    const productDocument = await productSchema.findByIdAndUpdate(productId, product, options);
 
     return new Product({
       id: productDocument._id,
@@ -100,17 +93,19 @@ export default class ProductMongooseRepository {
       stock: productDocument.stock,
       category: productDocument.category,
       thumbnails: productDocument.thumbnails,
+      owner: productDocument.owner,
     });
   }
   async deleteProduct(productId) {
     const productDocument = await productSchema.findByIdAndDelete(productId);
     if (!productDocument) {
-      throw { message: "Product not found" };
+      throw { message: 'Product not found' };
     }
     return new Product({
       id: productDocument._id,
       code: productDocument.code,
       title: productDocument.title,
+      owner: productDocument.owner,
     });
   }
 }

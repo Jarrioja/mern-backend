@@ -1,7 +1,7 @@
-import container from "../../container.js";
+import container from '../../container.js';
 class ProductManager {
   constructor() {
-    this.productRepository = container.resolve("ProductRepository");
+    this.productRepository = container.resolve('ProductRepository');
   }
 
   async find(params) {
@@ -10,7 +10,7 @@ class ProductManager {
 
   async findById(id) {
     const product = await this.productRepository.findById(id);
-    if (product == null) throw new Error("Product not found");
+    if (product == null) throw new Error('Product not found');
     return product;
   }
 
