@@ -77,4 +77,20 @@ const setPremiumUser = async (req, res, next) => {
     next(error);
   }
 };
-export { getUsers, getUserById, createUser, updateUser, deleteUser, setPremiumUser };
+
+const uploadDocuments = async (req, res, next) => {
+  try {
+    res.status(200).json({ message: 'Documents uploaded successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+export {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  setPremiumUser,
+  uploadDocuments,
+};
