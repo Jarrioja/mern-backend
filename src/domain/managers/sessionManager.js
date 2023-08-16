@@ -16,7 +16,7 @@ class SessionManager {
     return user;
   }
   async logout(userId) {
-    await this.userRepository.updateUser(userId, { lastConnection: null });
+    await this.userRepository.updateUser(userId, { lastConnection: new Date() });
   }
 
   async signup(user) {

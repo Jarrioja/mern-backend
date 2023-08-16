@@ -23,6 +23,9 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
     const manager = new SessionManager();
     const result = await manager.login(email, password);
+    req.user = result;
+    console.log('🚀 ~ file: sessionController.js:27 ~ login ~ req.user:', req.user.id);
+    //console.log('🚀 ~ file: sessionController.js:26 ~ login ~ result:', result);
     const accessToken = await generateToken(result);
 
     if (result.role === 'admin' || result.isAdmin) {
@@ -45,18 +48,8 @@ export const login = async (req, res, next) => {
 export const logout = async (req, res, next) => {
   try {
     res.clearCookie('accessToken');
-    const manager = new SessionManager();
-    manager.logout(req.user.id);
     res.user = null;
-    /* Revisar session */
-    // req.session.destroy((err) => {
-    //   if (!err) {
-    //
-    //     return res.status(200).json({
-    //       message: 'Logout ok!',
-    //     });
-    //   }
-    // });
+    return res.status(200).send({ status: 'success', message: 'Logout success!' });
   } catch (error) {
     next(error);
   }
