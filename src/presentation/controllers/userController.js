@@ -1,3 +1,4 @@
+import e from 'express';
 import UserManager from '../../domain/managers/userManager.js';
 
 const getUsers = async (req, res, next) => {
@@ -80,7 +81,26 @@ const setPremiumUser = async (req, res, next) => {
 
 const uploadDocuments = async (req, res, next) => {
   try {
-    res.status(200).json({ message: 'Documents uploaded successfully' });
+    const { profile, document } = req.files;
+
+    const docToUpdate = [
+      {
+        name: profile[0].fieldname,
+        reference: `/${profile[0].path}`,
+      },
+      {
+        name: document[0].fieldname,
+        reference: `/${document[0].path}`,
+      },
+    ];
+
+    req.user.documents = docToUpdate;
+    const manager = new UserManager();
+    const user = await manager.updateUser(req.params.id, { documents: docToUpdate });
+    return res.status(200).json({
+      status: 'success',
+      payload: user,
+    });
   } catch (error) {
     next(error);
   }

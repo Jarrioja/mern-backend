@@ -35,7 +35,7 @@ class SessionManager {
     const token = await generateToken(user);
 
     const result = await transporter.sendMail({
-      from: 'jarrioja2210@gmail.com',
+      from: process.env.GMAIL_EMAIL,
       to: email,
       subject: 'Password recovery link',
       html: `<a href="https://forms.jesusarrioja.dev/change-password?token=${token}">Reset password</a>

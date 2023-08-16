@@ -39,7 +39,7 @@ class UserManager {
       throw {
         message: 'User not found',
       };
-    return;
+    return userUpdated;
   }
 
   async deleteUser(userId) {
@@ -51,12 +51,11 @@ class UserManager {
       };
     return await this.userRepository.deleteUser(userId);
   }
+
   async setPremiumUser(userId) {
     try {
-      // Validar el ID del usuario
       await idValidation.parseAsync({ id: userId });
 
-      // Obtener los roles necesarios
       const [premiumRole, clientRole] = await Promise.all([
         this.roleRepository.getRoleByName('premium'),
         this.roleRepository.getRoleByName('client'),
@@ -66,14 +65,24 @@ class UserManager {
         throw new Error('Roles not found');
       }
 
-      // Obtener el usuario
       const user = await this.userRepository.getUserById(userId);
       if (!user) {
         throw new Error('User not found');
       }
 
-      // Cambiar el rol del usuario
-      const newRoleId = user.role.name === clientRole.name ? premiumRole.id : clientRole.id;
+      let newRoleId;
+      const documents = user.documents;
+      const hasProfileAndDocument =
+        documents.some((item) => item.name === 'profile') &&
+        documents.some((item) => item.name === 'document');
+      if (user.role.name === clientRole.name) {
+        if (!hasProfileAndDocument) {
+          throw new Error('Missing user documents');
+        }
+        newRoleId = premiumRole.id;
+      } else {
+        newRoleId = clientRole.id;
+      }
       const userUpdated = await this.userRepository.updateUser(userId, { role: newRoleId });
       return userUpdated;
     } catch (error) {

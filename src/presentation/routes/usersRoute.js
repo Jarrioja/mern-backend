@@ -24,6 +24,13 @@ userRouter.put('/:id', authorization('updateUser'), updateUser);
 userRouter.put('/premium/:id', authorization('updateUser'), setPremiumUser);
 userRouter.delete('/:id', authorization('deleteUser'), deleteUser);
 
-userRouter.post('/:id/documents', upload.array('files'), uploadDocuments);
+userRouter.post(
+  '/:id/documents',
+  upload.fields([
+    { name: 'profile', maxCount: 1 },
+    { name: 'document', maxCount: 1 },
+  ]),
+  uploadDocuments,
+);
 
 export default userRouter;
