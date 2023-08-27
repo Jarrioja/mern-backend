@@ -1,5 +1,5 @@
-import orderSchema from "../../models/mongoose/orderSchema.js";
-import Order from "../../../domain/entities/order.js";
+import orderSchema from '../../models/mongoose/orderSchema.js';
+import Order from '../../../domain/entities/order.js';
 
 export default class OrderMongooseRepositoy {
   async createOrder(orderData) {
@@ -17,6 +17,8 @@ export default class OrderMongooseRepositoy {
       code: orderDocument.code,
       amount: orderDocument.amount,
       createdAt: orderDocument.createdAt,
+      status: orderDocument.status,
+      completedAt: orderDocument.completedAt,
     });
   }
 }
