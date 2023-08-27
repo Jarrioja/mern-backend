@@ -49,7 +49,29 @@ class UserManager {
       throw {
         message: 'User not found',
       };
-    return await this.userRepository.deleteUser(userId);
+    return deletedUser;
+  }
+
+  async softDeleteInactiveUsers() {
+    try {
+      const { users } = await this.userRepository.getUsers({ paginate: false });
+      const now = new Date();
+      const twoDaysInMillis = 2 * 24 * 60 * 60 * 1000;
+      const inactiveUsers = [];
+      users.forEach((user) => {
+        if (!user.isAdmin) {
+          const lastConnectionTime =
+            user.lastConnection instanceof Date ? user.lastConnection.getTime() : 0;
+          if (now.getTime() - lastConnectionTime > twoDaysInMillis && user.status !== false) {
+            inactiveUsers.push({ id: user.id });
+          }
+        }
+      });
+      const softDeleteUser = await this.userRepository.softDeleteInactiveUsers(inactiveUsers);
+      return softDeleteUser;
+    } catch (error) {
+      throw new Error(`Failed to soft delete inactive users: ${error.message}`);
+    }
   }
 
   async setPremiumUser(userId) {

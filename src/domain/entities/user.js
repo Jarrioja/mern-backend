@@ -10,6 +10,7 @@ class User {
     this.role = props.role;
     this.cart = props.cart;
     this.documents = props.documents;
+    this.status = props.status;
     this.lastConnection = props.lastConnection;
   }
 }

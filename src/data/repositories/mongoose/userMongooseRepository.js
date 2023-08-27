@@ -5,7 +5,12 @@ import User from '../../../domain/entities/user.js';
 import Role from '../../../domain/entities/role.js';
 
 export default class UserMongooseRepository {
-  async getUsers({ limit, sort, role, page }) {
+  async getUsers(options) {
+    let { limit, sort, role, page, paginate } = options;
+    if (paginate === undefined) {
+      paginate = true;
+    }
+
     let paginateQuery = {};
     if (role) {
       paginateQuery = { role: role };
@@ -16,6 +21,7 @@ export default class UserMongooseRepository {
       page: page || 1,
       limit: limit || 10,
       sort: { email: sortQuery || -1 },
+      pagination: paginate,
     };
     const userDocuments = await userSchema.paginate(paginateQuery, paginateOptions);
 
@@ -31,6 +37,7 @@ export default class UserMongooseRepository {
           role: document.role,
           cart: document.cart,
           documents: document.documents,
+          status: document.status,
           lastConnection: document.lastConnection,
         }),
     );
@@ -56,6 +63,7 @@ export default class UserMongooseRepository {
       role: userDocument.role,
       cart: userDocument.cart,
       documents: userDocument.documents,
+      status: userDocument.status,
       lastConnection: userDocument.lastConnection,
     });
   }
@@ -71,6 +79,7 @@ export default class UserMongooseRepository {
       role: userDocument?.role,
       cart: userDocument?.cart,
       documents: userDocument.documents,
+      status: userDocument.status,
       lastConnection: userDocument.lastConnection,
     });
   }
@@ -106,6 +115,7 @@ export default class UserMongooseRepository {
       role: userDocument.role,
       cart: userDocument.cart,
       documents: userDocument.documents,
+      status: userDocument.status,
       lastConnection: userDocument.lastConnection,
     });
   }
@@ -136,8 +146,18 @@ export default class UserMongooseRepository {
       role: userDocument.role,
       cart: userDocument.cart,
       documents: userDocument.documents,
+      status: userDocument.status,
       lastConnection: userDocument.lastConnection,
     });
+  }
+
+  async softDeleteInactiveUsers(inactiveUsers) {
+    const userIds = inactiveUsers.map((user) => user.id);
+    const result = await userSchema.updateMany(
+      { _id: { $in: userIds } },
+      { $set: { status: false } },
+    );
+    return result.modifiedCount;
   }
 
   async deleteUser(userId) {

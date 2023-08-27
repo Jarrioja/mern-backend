@@ -7,7 +7,8 @@
     "test": "mocha src/tests/*.test.js --timeout 50000",
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
-    "lint:fix": "eslint --fix ./src"
+    "lint:fix": "eslint --fix ./src",
+    "command": "node src/command.js"
   },
   "engines": {
     "npm": ">=8.0.0",
@@ -43,9 +44,11 @@
     "mongoose": "^7.0.4",
     "mongoose-paginate-v2": "^1.7.1",
     "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.2",
     "nodemailer": "^6.9.3",
     "pino": "^8.14.2",
     "pino-http": "^8.3.3",
+    "shelljs": "^0.8.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "uniqid": "^5.4.0",

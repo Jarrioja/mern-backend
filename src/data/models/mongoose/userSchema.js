@@ -16,6 +16,7 @@ const UserSchema = new Schema({
       reference: String,
     },
   ],
+  status: { type: Boolean, default: true },
   lastConnection: { type: Date },
 });
 UserSchema.plugin(mongoosePaginate);

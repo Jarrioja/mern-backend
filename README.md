@@ -1,5 +1,24 @@
 # mern-backend
 
+# Comandos
+
+### Inicializar app
+
+Crea el usuario admin y los roles predeterminados
+
+user: `admin@coder.com` \
+password: `admin`
+
+```bash
+npm run command init
+```
+
+### Crear usuario
+
+```bash
+npm run command add-user --email admin@mail.com --password admin123 --firstName John --lastName Doe -age 99 -isAdmin true
+```
+
 ## Para ejecutar con nodemon
 
 ```bash

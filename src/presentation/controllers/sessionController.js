@@ -6,7 +6,7 @@ import { decodeToken, generateToken } from '../../common/jwt.js';
 export const signup = async (req, res, next) => {
   try {
     const manager = new SessionManager();
-    const result = await manager.signup(req.body);
+    const result = await manager.signup({ ...req.body, isAdmin: false, role: 'client' });
     return res.status(201).json({
       status: 'success',
       message: 'Signup success!',
@@ -24,8 +24,6 @@ export const login = async (req, res, next) => {
     const manager = new SessionManager();
     const result = await manager.login(email, password);
     req.user = result;
-    console.log('🚀 ~ file: sessionController.js:27 ~ login ~ req.user:', req.user.id);
-    //console.log('🚀 ~ file: sessionController.js:26 ~ login ~ result:', result);
     const accessToken = await generateToken(result);
 
     if (result.role === 'admin' || result.isAdmin) {

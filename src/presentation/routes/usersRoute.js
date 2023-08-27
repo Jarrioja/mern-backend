@@ -8,12 +8,15 @@ import {
   deleteUser,
   setPremiumUser,
   uploadDocuments,
+  softDeleteInactiveUsers,
 } from '../controllers/userController.js';
 import authenticate from '../middlewares/authenticate.js';
 import authorization from '../middlewares/authtorization.js';
 import upload from '../middlewares/upload.js';
 
 const userRouter = Router();
+
+userRouter.delete('/', softDeleteInactiveUsers);
 
 userRouter.use(authenticate);
 
@@ -23,7 +26,6 @@ userRouter.post('/', authorization('saveUser'), createUser);
 userRouter.put('/:id', authorization('updateUser'), updateUser);
 userRouter.put('/premium/:id', authorization('updateUser'), setPremiumUser);
 userRouter.delete('/:id', authorization('deleteUser'), deleteUser);
-
 userRouter.post(
   '/:id/documents',
   upload.fields([

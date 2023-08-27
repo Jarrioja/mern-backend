@@ -1,4 +1,3 @@
-import e from 'express';
 import UserManager from '../../domain/managers/userManager.js';
 
 const getUsers = async (req, res, next) => {
@@ -65,6 +64,19 @@ const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+const softDeleteInactiveUsers = async (req, res, next) => {
+  try {
+    const manager = new UserManager();
+    const softDeleteInactiveUsers = await manager.softDeleteInactiveUsers(req.params.id);
+
+    return res.status(200).json({
+      status: 'success',
+      message: `${softDeleteInactiveUsers} users were soft deleted successfully`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const setPremiumUser = async (req, res, next) => {
   try {
@@ -113,4 +125,5 @@ export {
   deleteUser,
   setPremiumUser,
   uploadDocuments,
+  softDeleteInactiveUsers,
 };
