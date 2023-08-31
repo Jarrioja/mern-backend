@@ -1,0 +1,27 @@
+import Stripe from 'stripe';
+import container from '../../container.js';
+
+class PaymentManager {
+  constructor() {
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    this.orderRepository = container.resolve('OrderRepository');
+  }
+  async payOrder({ id, amount, currency = 'usd', purchaser }) {
+    const order = await this.orderRepository.getOrder(id);
+    if (order.status === 'completed') {
+      throw new Error('Order is already paid');
+    }
+
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount: amount * 100,
+      currency,
+      receipt_email: purchaser,
+      confirm: true,
+      return_url: 'https://example.com/success',
+      payment_method: 'pm_card_visa',
+    });
+
+    return paymentIntent;
+  }
+}
+export default PaymentManager;

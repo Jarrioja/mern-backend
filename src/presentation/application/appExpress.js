@@ -7,6 +7,7 @@ import compression from 'express-compression';
 
 import { swaggerOptions } from '../../config/swagger.config.js';
 import productRouter from '../routes/productsRoute.js';
+import paymentRouter from '../routes/paymentRoute.js';
 import cartRouter from '../routes/cartsRoute.js';
 import userRouter from '../routes/usersRoute.js';
 import sessionRouter from '../routes/sessionsRoute.js';
@@ -15,6 +16,7 @@ import roleRouter from '../routes/roleRoute.js';
 import logger from '../middlewares/logger.js';
 import errorHandler from '../middlewares/errorHandler.js';
 import testLoggerRouter from '../routes/testLoggerRoute.js';
+
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -44,6 +46,7 @@ class AppExpress {
     this.app.use('/api/roles', roleRouter);
     this.app.use('/api/products', productRouter);
     this.app.use('/api/carts', cartRouter);
+    this.app.use('/api/payments', paymentRouter);
     this.app.use('/testLogger', testLoggerRouter);
     this.app.use(errorHandler);
   }

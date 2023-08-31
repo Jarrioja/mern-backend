@@ -53,6 +53,13 @@ class OrderManager {
     if (!noStockProducts.length) return orderCreated;
     return { orderCreated, noStockProducts };
   }
+
+  async getOrder(id) {
+    return this.orderRepository.getOrder(id);
+  }
+  async completeOrder(id) {
+    return this.orderRepository.updateOrder(id, { status: 'completed', completedAt: new Date() });
+  }
 }
 
 export default OrderManager;

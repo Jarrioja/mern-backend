@@ -17,6 +17,7 @@ cartRouter.get('/', createCart);
 cartRouter.get('/:cartId', getCartById);
 cartRouter.post('/:cartId/proudct/:productId/', authenticate, addToCart);
 cartRouter.post('/:cartId/purchase', authenticate, createOrder);
+
 cartRouter.delete('/:cartId/proudct/:productId/', deleteProduct);
 cartRouter.put('/:cartId', updateCart);
 cartRouter.put('/:cartId/proudct/:productId/', updateProductQuantity);

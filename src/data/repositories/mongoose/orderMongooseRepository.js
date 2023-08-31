@@ -21,4 +21,29 @@ export default class OrderMongooseRepositoy {
       completedAt: orderDocument.completedAt,
     });
   }
+
+  async getOrder(id) {
+    const orderDocument = await orderSchema.findById(id);
+    return new Order({
+      id: orderDocument._id,
+      purchaser: orderDocument.purchaser,
+      code: orderDocument.code,
+      amount: orderDocument.amount,
+      createdAt: orderDocument.createdAt,
+      status: orderDocument.status,
+      completedAt: orderDocument.completedAt,
+    });
+  }
+  async updateOrder(id, orderData) {
+    const orderDocument = await orderSchema.findByIdAndUpdate(id, orderData);
+    return new Order({
+      id: orderDocument._id,
+      purchaser: orderDocument.purchaser,
+      code: orderDocument.code,
+      amount: orderDocument.amount,
+      createdAt: orderDocument.createdAt,
+      status: orderDocument.status,
+      completedAt: orderDocument.completedAt,
+    });
+  }
 }

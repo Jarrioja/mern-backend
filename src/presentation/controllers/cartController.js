@@ -1,6 +1,7 @@
 import CartManager from '../../domain/managers/cartManager.js';
 import OrderManager from '../../domain/managers/orderManager.js';
 import ProductManager from '../../domain/managers/productManager.js';
+import PaymentManager from '../../domain/managers/paymentManager.js';
 import { decodeToken } from '../../common/jwt.js';
 
 export const getCartById = async (req, res, next) => {
