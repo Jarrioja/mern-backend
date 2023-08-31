@@ -1,7 +1,6 @@
 import CartManager from '../../domain/managers/cartManager.js';
 import OrderManager from '../../domain/managers/orderManager.js';
 import ProductManager from '../../domain/managers/productManager.js';
-import PaymentManager from '../../domain/managers/paymentManager.js';
 import { decodeToken } from '../../common/jwt.js';
 
 export const getCartById = async (req, res, next) => {
@@ -29,7 +28,7 @@ export const addToCart = async (req, res, next) => {
     const { user } = req;
     const productManager = new ProductManager();
     const product = await productManager.findById(req.params.productId);
-    if (user.email === product.owner) throw { message: 'You cannot add your own product to cart' };
+    if (user.email === product.owner) throw new Error('You cannot add your own product to cart');
     const manager = new CartManager();
     const cart = await manager.addProduct(req.params.cartId, req.params.productId);
     return res.status(201).json({ status: 'success', payload: cart });
