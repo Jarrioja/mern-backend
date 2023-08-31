@@ -42,10 +42,6 @@ const createRole = async (req, res, next) => {
 
 const updateRole = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
     const manager = new RoleManager();
     const role = await manager.updateRole(req.params.id, req.body);
     return res.status(200).json({

@@ -10,12 +10,8 @@ const UserSchema = new Schema({
   isAdmin: { type: Boolean, default: false },
   role: { type: Schema.Types.ObjectId, index: true, ref: 'Role' },
   cart: { type: Schema.Types.ObjectId, ref: 'Cart' },
-  documents: [
-    {
-      name: String,
-      reference: String,
-    },
-  ],
+  //orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
+  documents: [{ name: String, reference: String }],
   status: { type: Boolean, default: true },
   lastConnection: { type: Date },
 });
