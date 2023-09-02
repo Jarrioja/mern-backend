@@ -1,4 +1,8 @@
 import container from '../../container.js';
+import idValidation from '../validations/common/idValidation.js';
+import roleCreateValidation from '../validations/role/roleCreateValidation.js';
+import roleUpdateValidation from '../validations/role/roleUpdateValidation.js';
+
 class RoleManager {
   constructor() {
     this.roleRepository = container.resolve('RoleRepository');
@@ -9,6 +13,7 @@ class RoleManager {
   }
 
   async getRoleById(roleId) {
+    await idValidation.parseAsync({ id: roleId });
     return await this.roleRepository.getRoleById(roleId);
   }
 
@@ -17,15 +22,18 @@ class RoleManager {
   }
 
   async createRole(role) {
+    await roleCreateValidation.parseAsync(role);
     const newRole = await this.roleRepository.createRole(role);
     return newRole;
   }
 
   async updateRole(roleId, role) {
+    await roleUpdateValidation.parseAsync({ id: roleId, ...role });
     return await this.roleRepository.updateRole(roleId, role);
   }
 
   async deleteRole(roleId) {
+    await idValidation.parseAsync({ id: roleId });
     return await this.roleRepository.deleteRole(roleId);
   }
 }

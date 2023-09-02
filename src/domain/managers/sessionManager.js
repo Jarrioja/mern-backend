@@ -2,12 +2,16 @@ import container from '../../container.js';
 import { createHash, isValidPassword } from '../../common/encrypt.js';
 import { transporter } from '../../common/sendMail.js';
 import { decodeToken, generateToken } from '../../common/jwt.js';
+import idValidation from '../validations/common/idValidation.js';
+import emailValidation from '../validations/common/emailValidation.js';
+import userCreateValidation from '../validations/user/userCreateValidation.js';
 class SessionManager {
   constructor() {
     this.userRepository = new container.resolve('UserRepository');
   }
 
   async login(email, password) {
+    await emailValidation.parseAsync({ email });
     const user = await this.userRepository.getUserByEmail(email);
     if (!user.email) throw new Error('User not found');
     const isPasswordCorrect = await isValidPassword(password, user.password);
@@ -16,10 +20,12 @@ class SessionManager {
     return user;
   }
   async logout(userId) {
+    await idValidation.parseAsync({ id: userId });
     await this.userRepository.updateUser(userId, { lastConnection: new Date() });
   }
 
   async signup(user) {
+    await userCreateValidation.parseAsync(user);
     const encryptedPassword = await createHash(user.password);
     const newUser = {
       ...user,
@@ -29,6 +35,7 @@ class SessionManager {
   }
 
   async forgotPassword(email) {
+    await emailValidation.parseAsync({ email });
     const user = await this.userRepository.getUserByEmail(email);
 
     if (!user.email) throw new Error('User not found');
@@ -38,7 +45,7 @@ class SessionManager {
       from: process.env.GMAIL_EMAIL,
       to: email,
       subject: 'Password recovery link',
-      html: `<a href="https://forms.jesusarrioja.dev/change-password?token=${token}">Reset password</a>
+      html: `<a href=${process.env.FRONT_URL}/change-password?token=${token}>Reset password</a>
       
       <p><b>Token: </b><code>${token}</code></p>
       `,

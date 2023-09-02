@@ -42,7 +42,7 @@ export default class ProductMongooseRepository {
   }
   async findById(productId) {
     const productDocument = await productSchema.findById(productId);
-
+    if (!productDocument) throw { message: 'Product not found' };
     return new Product({
       id: productDocument._id,
       code: productDocument.code,

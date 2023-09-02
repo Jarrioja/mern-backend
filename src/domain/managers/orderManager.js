@@ -57,6 +57,7 @@ class OrderManager {
   async getOrder(id) {
     return this.orderRepository.getOrder(id);
   }
+
   async completeOrder(id) {
     return this.orderRepository.updateOrder(id, { status: 'completed', completedAt: new Date() });
   }

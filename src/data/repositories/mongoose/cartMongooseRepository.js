@@ -1,6 +1,7 @@
-import cartSchema from "../../models/mongoose/cartSchema.js";
-import productSchema from "../../models/mongoose/productSchema.js";
-import Cart from "../../../domain/entities/cart.js";
+import cartSchema from '../../models/mongoose/cartSchema.js';
+import productSchema from '../../models/mongoose/productSchema.js';
+import Cart from '../../../domain/entities/cart.js';
+import quantityValidation from '../../../domain/validations/cart/quantityValidation.js';
 
 export default class CartMongooseRepository {
   async findById(cartId) {
@@ -25,10 +26,10 @@ export default class CartMongooseRepository {
 
   async addProduct(cartId, productId) {
     const cartDocument = await cartSchema.findById(cartId);
-    if (!cartDocument) throw { message: "Cart not found" };
+    if (!cartDocument) throw { message: 'Cart not found' };
 
     const product = await productSchema.findById(productId);
-    if (!product) throw { message: "Product not found" };
+    if (!product) throw { message: 'Product not found' };
 
     const productInCart = cartDocument.products.find((p) => {
       return p.product.equals(productId);
@@ -44,10 +45,10 @@ export default class CartMongooseRepository {
 
   async deleteProduct(cartId, productId) {
     const cartDocument = await cartSchema.findById(cartId);
-    if (!cartDocument) throw { message: "Cart not found" };
+    if (!cartDocument) throw { message: 'Cart not found' };
 
     const product = await productSchema.findById(productId);
-    if (!product) throw { message: "Product not found" };
+    if (!product) throw { message: 'Product not found' };
 
     const index = cartDocument.products.findIndex((p) => {
       return p.product.equals(productId);
@@ -65,8 +66,25 @@ export default class CartMongooseRepository {
 
   async updateCart(cartId, products) {
     const cartDocument = await cartSchema.findById(cartId);
-    if (!cartDocument) throw { message: "Cart not found" };
-    cartDocument.products = products;
+    if (!cartDocument) throw { message: 'Cart not found' };
+    const productsExist = await Promise.all(
+      products.map(async (p) => {
+        const product = await productSchema.findById(p.product);
+        return product;
+      }),
+    );
+    const validProducts = productsExist.filter(
+      (product) => product !== undefined && product !== null,
+    );
+
+    if (validProducts.length === 0) throw { message: 'Products not found' };
+    const productsToUpdate = products.filter(
+      (product) =>
+        validProducts.some((validProduct) => validProduct._id.toString() === product.product) &&
+        product.quantity > 0,
+    );
+    if (productsToUpdate.length === 0) throw { message: 'Products not found or quantity is 0' };
+    cartDocument.products = productsToUpdate;
     await cartDocument.save();
     return new Cart({
       id: cartDocument._id,
@@ -76,13 +94,11 @@ export default class CartMongooseRepository {
 
   async updateProductQuantity(cartId, productId, quantity) {
     const cartDocument = await cartSchema.findById(cartId);
-    if (!cartDocument) throw { message: "Cart not found" };
+    if (!cartDocument) throw { message: 'Cart not found' };
     const product = await productSchema.findById(productId);
-    if (!product) throw { message: "Product not found" };
+    if (!product) throw { message: 'Product not found' };
 
-    const productInCart = cartDocument.products.find((p) =>
-      p.product.equals(productId)
-    );
+    const productInCart = cartDocument.products.find((p) => p.product.equals(productId));
 
     if (productInCart) productInCart.quantity = quantity;
     else cartDocument.products.push({ product: productId, quantity: quantity });
@@ -96,7 +112,7 @@ export default class CartMongooseRepository {
 
   async emptyCart(cartId) {
     const cartDocument = await cartSchema.findById(cartId);
-    if (!cartDocument) throw { message: "Cart not found" };
+    if (!cartDocument) throw { message: 'Cart not found' };
     cartDocument.products = [];
     await cartDocument.save();
     return new Cart({
@@ -106,10 +122,8 @@ export default class CartMongooseRepository {
   }
 
   async getCartWithProducts(cartId) {
-    const cartDocument = await cartSchema
-      .findById(cartId)
-      .populate("products.product");
-    if (!cartDocument) throw { message: "Cart not found" };
+    const cartDocument = await cartSchema.findById(cartId).populate('products.product');
+    if (!cartDocument) throw { message: 'Cart not found' };
     return new Cart({
       id: cartDocument._id,
       products: cartDocument.products,

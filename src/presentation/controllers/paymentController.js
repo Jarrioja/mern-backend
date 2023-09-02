@@ -12,6 +12,7 @@ export const payOrder = async (req, res, next) => {
       return res.status(400).json({ status: 'failed', payload: payOrder.status });
     }
     const newOrder = await orderManager.completeOrder(order.id);
+
     return res.status(201).json({ status: 'success', payload: newOrder });
   } catch (err) {
     next(err);

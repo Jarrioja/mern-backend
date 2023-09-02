@@ -24,6 +24,7 @@ export default class OrderMongooseRepositoy {
 
   async getOrder(id) {
     const orderDocument = await orderSchema.findById(id);
+    if (!orderDocument) throw { message: 'Order not found' };
     return new Order({
       id: orderDocument._id,
       purchaser: orderDocument.purchaser,
@@ -35,7 +36,8 @@ export default class OrderMongooseRepositoy {
     });
   }
   async updateOrder(id, orderData) {
-    const orderDocument = await orderSchema.findByIdAndUpdate(id, orderData);
+    const orderDocument = await orderSchema.findByIdAndUpdate(id, orderData, { new: true });
+    if (!orderDocument) throw { message: 'Order not found' };
     return new Order({
       id: orderDocument._id,
       purchaser: orderDocument.purchaser,
