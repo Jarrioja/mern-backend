@@ -17,7 +17,7 @@ class PaymentManager {
       currency,
       receipt_email: purchaser,
       confirm: true,
-      return_url: 'https://example.com/success',
+      return_url: `${process.env.FRONTEND_URL}/success`,
       payment_method: 'pm_card_visa',
     });
 
